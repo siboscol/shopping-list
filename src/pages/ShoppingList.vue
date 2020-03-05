@@ -1,5 +1,21 @@
 <template>
   <q-page class="bg-grey-3 column">
+    <div class="row q-pa-sm bg-primary">
+      <q-input
+        filled
+        v-model="newItem"
+        placeholder="Add item"
+        class="col"
+        dense
+        bg-color="white"
+        square
+        @keyup.enter="addItem"
+      >
+        <template v-slot:after>
+          <q-btn round dense flat icon="add" @click="addItem" />
+        </template>
+      </q-input>
+    </div>
     <q-list class="bg-white" separator bordered>
       <q-item
         v-for="(item, index) in list"
@@ -20,6 +36,12 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <div v-if="!list.length" class="no-items absolute-center">
+      <q-icon name="check" size="100px" color="primary" />
+      <div class="text-h5 text-primary text-center">
+        No items
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -27,20 +49,8 @@
 export default {
   data() {
     return {
-      list: [
-        {
-          title: 'Bananas',
-          done: false
-        },
-        {
-          title: 'Apples',
-          done: true
-        },
-        {
-          title: 'Pears',
-          done: false
-        }
-      ]
+      newItem: '',
+      list: []
     }
   },
   methods: {
@@ -56,6 +66,13 @@ export default {
           this.list.splice(index, 1)
           this.$q.notify('Item deleted')
         })
+    },
+    addItem() {
+      this.list.push({
+        title: this.newItem,
+        done: false
+      })
+      this.newItem = ''
     }
   }
 }
@@ -67,5 +84,8 @@ export default {
     text-decoration: line-through;
     color: #bbb;
   }
+}
+.no-items {
+  opacity: 0.5;
 }
 </style>
