@@ -4,7 +4,7 @@
       <q-input
         filled
         v-model="newItem"
-        placeholder="Add item"
+        placeholder="Search/Add item"
         class="col"
         dense
         bg-color="white"
@@ -18,7 +18,7 @@
     </div>
     <q-list class="bg-white" separator bordered>
       <q-item
-        v-for="(item, index) in list"
+        v-for="(item, index) in filterList"
         :key="index"
         v-ripple
         clickable
@@ -30,6 +30,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.title }}</q-item-label>
+          <q-item-label caption="">{{ item.price }} €</q-item-label>
         </q-item-section>
         <q-item-section v-if="item.done" side>
           <q-btn flat dense round color="primary" icon="delete" @click.stop="deleteItem(index)" />
@@ -42,6 +43,19 @@
         No items
       </div>
     </div>
+    <q-footer elevated>
+      <q-toolbar>
+        <div class="column">
+          <div>Cart Total: {{ crossedItemsTotal }} €</div>
+          <div>List Total: {{ listTotal }} €</div>
+        </div>
+        <q-space />
+        <div class="column">
+          <div>Items crossed: {{ crossedItems.length }}</div>
+          <div>Items in list: {{ list.length }}</div>
+        </div>
+      </q-toolbar>
+    </q-footer>
   </q-page>
 </template>
 
@@ -70,9 +84,28 @@ export default {
     addItem() {
       this.list.push({
         title: this.newItem,
-        done: false
+        done: false,
+        price: 2
       })
       this.newItem = ''
+    },
+    getTotal(items) {
+      const reducerSum = (sum, i) => sum + i.price
+      return items.reduce(reducerSum, 0)
+    }
+  },
+  computed: {
+    crossedItems() {
+      return this.list.filter(i => i.done === true)
+    },
+    crossedItemsTotal() {
+      return this.getTotal(this.crossedItems)
+    },
+    listTotal() {
+      return this.getTotal(this.list)
+    },
+    filterList() {
+      return this.list.filter(item => item.title.match(this.newItem))
     }
   }
 }
