@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-grey-3 column">
-    <q-list class="bg-white move-below-bar" separator bordered >
+    <q-list class="bg-white move-below-bar" separator bordered>
       <q-item
         v-for="(item, index) in filterList"
         :key="index"
@@ -14,10 +14,16 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.title }}</q-item-label>
-          <q-item-label caption="">{{ item.price }} €</q-item-label>
+          <q-item-label caption>{{ totalPrice(item) }} €</q-item-label>
         </q-item-section>
-        <q-item-section v-if="item.done" side>
-          <q-btn flat dense round color="primary" icon="delete" @click.stop="deleteItem(index)" />
+        <q-item-section side>
+          <q-item-label caption>Qty: {{ item.quantity }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <div class="text-grey-8 q-gutter-xs">
+            <q-btn flat dense round color="primary" icon="edit" @click.stop="editItem(index)" />
+            <q-btn flat dense round color="primary" icon="delete" @click.stop="deleteItem(index)" />
+          </div>
         </q-item-section>
       </q-item>
     </q-list>
@@ -62,6 +68,8 @@
 </template>
 
 <script>
+import EditDialog from '../components/EditDialog'
+
 export default {
   data() {
     return {
@@ -83,17 +91,33 @@ export default {
           this.$q.notify('Item deleted')
         })
     },
+    editItem(index) {
+      this.$q
+        .dialog({
+          component: EditDialog,
+          item: this.list[index]
+        })
+        .onOk(editedItem => {
+          this.list[index] = editedItem
+          this.$q.notify('Item edited')
+        })
+    },
     addItem() {
       this.list.push({
         title: this.newItem,
         done: false,
-        price: 2
+        price: 0,
+        quantity: 1
       })
       this.newItem = ''
+      this.$q.notify('Item added')
     },
     getTotal(items) {
-      const reducerSum = (sum, i) => sum + i.price
+      const reducerSum = (sum, i) => sum + this.totalPrice(i)
       return items.reduce(reducerSum, 0)
+    },
+    totalPrice(item) {
+      return item.price * item.quantity
     }
   },
   computed: {
