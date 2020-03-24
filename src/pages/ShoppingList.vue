@@ -1,22 +1,6 @@
 <template>
   <q-page class="bg-grey-3 column">
-    <div class="row q-pa-sm bg-primary">
-      <q-input
-        filled
-        v-model="newItem"
-        placeholder="Search/Add item"
-        class="col"
-        dense
-        bg-color="white"
-        square
-        @keyup.enter="addItem"
-      >
-        <template v-slot:after>
-          <q-btn round dense flat icon="add" @click="addItem" />
-        </template>
-      </q-input>
-    </div>
-    <q-list class="bg-white" separator bordered>
+    <q-list class="bg-white move-below-bar" separator bordered >
       <q-item
         v-for="(item, index) in filterList"
         :key="index"
@@ -43,6 +27,24 @@
         No items
       </div>
     </div>
+    <q-page-sticky expand position="top">
+      <div class="col q-pa-sm bg-primary">
+        <q-input
+          filled
+          v-model="newItem"
+          placeholder="Search/Add item"
+          class="col"
+          dense
+          bg-color="white"
+          square
+          @keyup.enter="addItem"
+        >
+          <template v-slot:after>
+            <q-btn round dense flat icon="add" @click="addItem" />
+          </template>
+        </q-input>
+      </div>
+    </q-page-sticky>
     <q-footer elevated>
       <q-toolbar>
         <div class="column">
@@ -120,5 +122,8 @@ export default {
 }
 .no-items {
   opacity: 0.5;
+}
+.move-below-bar {
+  margin-top: 56px;
 }
 </style>
