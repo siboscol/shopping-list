@@ -98,7 +98,7 @@ export default {
           item: this.list[index]
         })
         .onOk(editedItem => {
-          this.list[index] = editedItem
+          this.list.splice(index, 1, editedItem)
           this.$q.notify('Item edited')
         })
     },

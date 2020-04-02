@@ -12,24 +12,45 @@
           style="top: 0; right: 12px; transform: translateY(-50%);"
         />
 
-        <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis">
-            {{item.title}}
-          </div>
+        <div class="row ">
+            <q-input v-model="editedItem.title" class="col" type="text" label="Title" />
         </div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <q-input v-model="editedItem.title" type="text" label="Title" />
-        <q-input v-model="editedItem.price" type="number" label="Price" />
-        <q-input v-model="editedItem.quantity" type="number" label="Quantity" />
+      <q-card-section class="row no-wrap q-pt-none">
+        <q-input
+          v-model.number="editedItem.price"
+          class="col-6 .col-md-auto q-pr-xs"
+          type="number"
+          label="Price"
+          filled
+          prefix="€"
+          :rules="[
+            val => (val !== null && val !== '') || 'Please type a price',
+            val => val > 0 || 'Please price can not be 0.'
+          ]"
+        />
+        <q-input
+          v-model.number="editedItem.quantity"
+          type="number"
+          label="Quantity"
+          filled
+          class="col-6 q-pl-xs"
+          :rules="[
+            val => (val !== null && val !== '') || 'Please type a quantity',
+            val => val > 0 || 'Please quantity can not be 0.'
+          ]"
+        >
+          <template v-slot:append>
+            <q-btn round dense flat icon="remove" @click="addRemoveQty('remove')" />
+            <q-btn round dense flat icon="add" @click="addRemoveQty('add')" />
+          </template>
+        </q-input>
       </q-card-section>
 
-      <q-separator />
-
       <q-card-actions align="right">
-        <q-btn color="primary" label="Save" @click="onOKClick" />
-        <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+        <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
+        <q-btn color="primary" flat label="Save" @click="onOKClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -43,7 +64,7 @@ export default {
   },
   data() {
     return {
-      editedItem: this.item
+      editedItem: {...this.item}
     }
   },
   methods: {
@@ -76,10 +97,27 @@ export default {
     onCancelClick() {
       // we just need to hide dialog
       this.hide()
+    },
+    addRemoveQty(type) {
+      if (type === 'remove' && this.editedItem.quantity > 1) {
+        this.editedItem.quantity = this.editedItem.quantity - 1
+      }
+      if (type === 'add') {
+        this.editedItem.quantity = this.editedItem.quantity + 1
+      }
     }
   }
 }
 </script>
 
 <style>
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
 </style>
