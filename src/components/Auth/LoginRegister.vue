@@ -15,7 +15,6 @@
         class="col"
         v-model="formData.email"
         label="Email"
-        stack-label
         :rules="[
           val => isValidEmail(val) || 'Please enter a valid email address.'
         ]"
@@ -30,7 +29,6 @@
         v-model="formData.password"
         type="password"
         label="Password"
-        stack-label
         :rules="[
           val => val.length >= 6 || 'Password should be at least 6 characters.'
         ]"
@@ -43,22 +41,24 @@
         v-if="panel === 'login'"
         flat
         label="Create account"
-        @click="goToRegister()"
+        @click="$emit('register')"
       />
       <q-btn
         color="primary"
         v-if="panel === 'register'"
         flat
         label="Log in"
-        @click="goToLogin()"
+        @click="$emit('login')"
       />
       <q-space />
-      <q-btn color="primary" flat :label="panel" type="submit" />
+      <q-btn color="primary" :label="panel" type="submit" />
     </div>
   </form>
 </template>
 
 <script>
+import { firebaseAuth } from 'boot/firebase'
+
 export default {
   name: 'Register',
   props: ['panel'],
@@ -71,14 +71,18 @@ export default {
     }
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       this.$refs.email.validate()
       this.$refs.password.validate()
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
-        if (this.panel === 'login') {
-          console.log('Logging in')
-        } else {
-          console.log('Registering')
+        try {
+          if (this.panel === 'login') {
+            await this.login()
+          } else {
+            await this.register()
+          }
+        } catch (error) {
+          console.log('Error Registering', error)
         }
       }
     },
@@ -86,11 +90,27 @@ export default {
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     },
-    goToRegister() {
-      this.$emit('register')
+    async login() {
+      try {
+        const res = await firebaseAuth.signInWithEmailAndPassword(
+          this.formData.email,
+          this.formData.password
+        )
+        console.log('Logged in', res)
+      } catch (error) {
+        console.log('Error Logging in', error)
+      }
     },
-    goToLogin() {
-      this.$emit('login')
+    async register() {
+      try {
+        const res = await firebaseAuth.createUserWithEmailAndPassword(
+          this.formData.email,
+          this.formData.password
+        )
+        console.log('Registered', res)
+      } catch (error) {
+        console.log('Error Registering', error)
+      }
     }
   },
   filters: {

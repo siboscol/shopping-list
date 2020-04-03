@@ -2,18 +2,50 @@
   <q-layout view="lHh Lpr lFf">
     <q-header>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-        <q-btn to="/auth" flat icon-right="account_circle" label="Login" class="absolute-right" />
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        />
+        <q-btn
+          flat
+          to="/auth"
+          v-if="!isLoggedIn"
+          icon-right="account_circle"
+          label="Login"
+          class="absolute-right"
+        />
+        <q-btn
+          flat
+          v-else
+          icon-right="account_circle"
+          label="Logout"
+          class="absolute-right"
+          @click="$emit('logout')"
+        />
       </q-toolbar>
       <div class="q-px-lg q-pt-xl q-md-md">
         <div class="text-h3">Shopping list</div>
         <div class="text-subtitle1">{{ todaysDate }}</div>
       </div>
-      <q-img src="/statics/mountains.jpg" class="header-image absolute-top"></q-img>
+      <q-img
+        src="/statics/mountains.jpg"
+        class="header-image absolute-top"
+      ></q-img>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above :width="250" :breakpoint="600">
-      <q-scroll-area style="height: calc(100% - 176px); margin-top: 176px; border-right: 1px solid #ddd">
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      :width="250"
+      :breakpoint="600"
+    >
+      <q-scroll-area
+        style="height: calc(100% - 176px); margin-top: 176px; border-right: 1px solid #ddd"
+      >
         <q-list padding>
           <q-item to="/" exact clickable v-ripple>
             <q-item-section avatar>
@@ -36,7 +68,11 @@
         </q-list>
       </q-scroll-area>
 
-      <q-img class="absolute-top" src="/statics/mountains.jpg" style="height: 176px">
+      <q-img
+        class="absolute-top"
+        src="/statics/mountains.jpg"
+        style="height: 176px"
+      >
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img src="statics/doubleb.png" />
@@ -59,6 +95,7 @@ import { date } from 'quasar'
 
 export default {
   name: 'MainLayout',
+  props: ['isLoggedIn'],
   data() {
     return {
       leftDrawerOpen: false
