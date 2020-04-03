@@ -1,4 +1,3 @@
-
 const routes = [
   {
     path: '/',
@@ -7,7 +6,8 @@ const routes = [
       { path: '', component: () => import('pages/ShoppingList.vue') },
       { path: '/help', component: () => import('pages/Help.vue') }
     ]
-  }
+  },
+  { path: '/auth', component: () => import('layouts/Auth.vue') }
 ]
 
 // Always leave this as last one

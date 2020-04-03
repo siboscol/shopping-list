@@ -13,7 +13,12 @@
         />
 
         <div class="row ">
-            <q-input v-model="editedItem.title" class="col" type="text" label="Title" />
+          <q-input
+            v-model="editedItem.title"
+            class="col"
+            type="text"
+            label="Title"
+          />
         </div>
       </q-card-section>
 
@@ -42,7 +47,13 @@
           ]"
         >
           <template v-slot:append>
-            <q-btn round dense flat icon="remove" @click="addRemoveQty('remove')" />
+            <q-btn
+              round
+              dense
+              flat
+              icon="remove"
+              @click="addRemoveQty('remove')"
+            />
             <q-btn round dense flat icon="add" @click="addRemoveQty('add')" />
           </template>
         </q-input>
@@ -64,7 +75,7 @@ export default {
   },
   data() {
     return {
-      editedItem: {...this.item}
+      editedItem: { ...this.item }
     }
   },
   methods: {

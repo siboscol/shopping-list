@@ -3,6 +3,7 @@
     <q-header>
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
+        <q-btn to="/auth" flat icon-right="account_circle" label="Login" class="absolute-right" />
       </q-toolbar>
       <div class="q-px-lg q-pt-xl q-md-md">
         <div class="text-h3">Shopping list</div>
