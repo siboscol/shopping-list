@@ -58,6 +58,7 @@
 
 <script>
 import { firebaseAuth } from 'boot/firebase'
+import { showErrorMessage } from 'src/utils/showErrorMessage'
 
 export default {
   name: 'Register',
@@ -76,11 +77,13 @@ export default {
       this.$refs.password.validate()
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
         try {
+          this.$q.loading.show()
           if (this.panel === 'login') {
             await this.login()
           } else {
             await this.register()
           }
+          this.$q.loading.hide()
         } catch (error) {
           console.log('Error Registering', error)
         }
@@ -99,6 +102,7 @@ export default {
         console.log('Logged in', res)
       } catch (error) {
         console.log('Error Logging in', error)
+        showErrorMessage(error.message)
       }
     },
     async register() {
@@ -110,6 +114,7 @@ export default {
         console.log('Registered', res)
       } catch (error) {
         console.log('Error Registering', error)
+        showErrorMessage(error.message)
       }
     }
   },
