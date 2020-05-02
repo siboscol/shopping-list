@@ -6,11 +6,11 @@
         :key="index"
         v-ripple
         clickable
-        @click="item.done = !item.done"
+        @click.stop="editItem(index)"
         :class="{ 'done bg-blue-1': item.done }"
       >
         <q-item-section avatar>
-          <q-checkbox class="no-pointer-events" v-model="item.done" color="primary" />
+          <q-checkbox v-model="item.done" color="primary" />
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.title }}</q-item-label>
@@ -21,20 +21,34 @@
         </q-item-section>
         <q-item-section side>
           <div class="text-grey-8 q-gutter-xs">
-            <q-btn flat dense round color="primary" icon="edit" @click.stop="editItem(index)" />
-            <q-btn flat dense round color="primary" icon="delete" @click.stop="deleteItem(index)" />
+            <q-btn
+              flat
+              dense
+              round
+              color="primary"
+              icon="edit"
+              @click.stop="editItem(index)"
+            />
+            <q-btn
+              flat
+              dense
+              round
+              color="primary"
+              icon="delete"
+              @click.stop="deleteItem(index)"
+            />
           </div>
         </q-item-section>
       </q-item>
     </q-list>
-    <div v-if="!list.length" class="no-items absolute-center">
+    <div v-if="!list.length" class="no-items text-center q-my-md">
       <q-icon name="check" size="100px" color="primary" />
-      <div class="text-h5 text-primary text-center">
+      <div class="text-h5 text-primary">
         No items
       </div>
     </div>
     <q-page-sticky expand position="top">
-      <div class="col q-pa-sm bg-primary">
+      <div class="col q-px-md q-py-sm bg-primary">
         <q-input
           filled
           v-model="newItem"
@@ -46,13 +60,17 @@
           @keyup.enter="addItem"
         >
           <template v-slot:after>
-            <q-btn round dense flat icon="add" @click="addItem" />
+            <q-btn
+              push
+              color="white"
+              text-color="primary"
+              icon="add"
+              @click="addItem"
+            />
           </template>
         </q-input>
       </div>
-    </q-page-sticky>
-    <q-footer elevated>
-      <q-toolbar>
+      <q-toolbar class="q-px-md bg-white">
         <div class="column">
           <div>Cart Total: {{ crossedItemsTotal }} €</div>
           <div>List Total: {{ listTotal }} €</div>
@@ -63,7 +81,7 @@
           <div>Items in list: {{ list.length }}</div>
         </div>
       </q-toolbar>
-    </q-footer>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -103,7 +121,7 @@ export default {
         })
     },
     addItem() {
-      this.list.push({
+      this.list.unshift({
         title: this.newItem,
         done: false,
         price: 0,
@@ -148,6 +166,6 @@ export default {
   opacity: 0.5;
 }
 .move-below-bar {
-  margin-top: 56px;
+  margin-top: 106px;
 }
 </style>

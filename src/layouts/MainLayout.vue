@@ -27,8 +27,8 @@
           @click="$emit('logout')"
         />
       </q-toolbar>
-      <div class="q-px-lg q-pt-xl q-md-md">
-        <div class="text-h3">Shopping list</div>
+      <div class="q-px-md q-md-md">
+        <div class="text-h4">Shopping list</div>
         <div class="text-subtitle1">{{ todaysDate }}</div>
       </div>
       <q-img
