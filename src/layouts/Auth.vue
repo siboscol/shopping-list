@@ -6,7 +6,7 @@
         <div class="text-subtitle1">{{ todaysDate }}</div>
       </div>
       <q-img
-        src="/statics/mountains.jpg"
+        src="statics/mountains.jpg"
         class="header-image absolute-top"
       ></q-img>
     </q-header>

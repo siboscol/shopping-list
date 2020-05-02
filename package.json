@@ -2,7 +2,7 @@
   "name": "shopping-list",
   "version": "0.0.1",
   "description": "A shopping list app to track expenses at the grocery store",
-  "productName": "Quasar Shopping List",
+  "productName": "My Shopping List",
   "cordovaId": "com.simone.boscolo.berto.quasar",
   "capacitorId": "",
   "author": "Simone Boscolo Berto",

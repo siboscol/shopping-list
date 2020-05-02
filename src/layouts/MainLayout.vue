@@ -28,11 +28,11 @@
         />
       </q-toolbar>
       <div class="q-px-md q-md-md">
-        <div class="text-h4">Shopping list</div>
+        <div class="text-h4">My Shopping List</div>
         <div class="text-subtitle1">{{ todaysDate }}</div>
       </div>
       <q-img
-        src="/statics/mountains.jpg"
+        src="statics/mountains.jpg"
         class="header-image absolute-top"
       ></q-img>
     </q-header>
@@ -70,7 +70,7 @@
 
       <q-img
         class="absolute-top"
-        src="/statics/mountains.jpg"
+        src="statics/mountains.jpg"
         style="height: 176px"
       >
         <div class="absolute-bottom bg-transparent">
