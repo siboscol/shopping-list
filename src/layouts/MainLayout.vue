@@ -1,6 +1,10 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header>
+    <q-img
+      src="statics/mountains.jpg"
+      class="fixed-top hero-image"
+    ></q-img>
+    <q-header class="bg-transparent">
       <q-toolbar>
         <q-btn
           flat
@@ -10,31 +14,26 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
+        <q-toolbar-title>
+          My Shopping list
+        </q-toolbar-title>
         <q-btn
           flat
           to="/auth"
           v-if="!isLoggedIn"
+          dense
           icon-right="account_circle"
           label="Login"
-          class="absolute-right"
         />
         <q-btn
           flat
           v-else
           icon-right="account_circle"
           label="Logout"
-          class="absolute-right"
+          dense
           @click="$emit('logout')"
         />
       </q-toolbar>
-      <div class="q-px-md q-md-md">
-        <div class="text-h4">My Shopping List</div>
-        <div class="text-subtitle1">{{ todaysDate }}</div>
-      </div>
-      <q-img
-        src="statics/mountains.jpg"
-        class="header-image absolute-top"
-      ></q-img>
     </q-header>
 
     <q-drawer
@@ -111,10 +110,7 @@ export default {
 </script>
 
 <style lang="scss">
-.header-image {
-  height: 100%;
-  z-index: -1;
-  opacity: 0.2;
-  filter: grayscale(100%);
+.hero-image {
+  height: 197px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-grey-3 column">
+  <q-page class="column">
     <q-list class="bg-white move-below-bar" separator bordered>
       <q-item
         v-for="(item, index) in filterList"
@@ -14,7 +14,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.title }}</q-item-label>
-          <q-item-label caption>{{ totalPrice(item) }} €</q-item-label>
+          <q-item-label caption>{{ totalPrice(item) }} CHF</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-item-label caption>Qty: {{ item.quantity }}</q-item-label>
@@ -47,16 +47,26 @@
         No items
       </div>
     </div>
-    <q-page-sticky expand position="top">
-      <div class="col q-px-md q-py-sm bg-primary">
+    <q-page-sticky expand position="top" class="q-px-md">
+      <div class="row q-py-sm full-width text-white">
+        <div class="column">
+          <div class="text-h5">Total</div>
+          <div class="text-subtitle1">{{ list.length }} items</div>
+        </div>
+        <q-space />
+        <div class="column">
+          <div class="text-h4">{{ listTotal }}</div>
+          <div class="text-subtitle3 text-right">CHF</div>
+        </div>
+      </div>
+      <div class="row q-py-sm full-width">
         <q-input
-          filled
           v-model="newItem"
           placeholder="Search/Add item"
           class="col"
           dense
           bg-color="white"
-          square
+          outlined
           @keyup.enter="addItem"
         >
           <template v-slot:after>
@@ -70,17 +80,6 @@
           </template>
         </q-input>
       </div>
-      <q-toolbar class="q-px-md bg-white">
-        <div class="column">
-          <div>Cart Total: {{ crossedItemsTotal }} €</div>
-          <div>List Total: {{ listTotal }} €</div>
-        </div>
-        <q-space />
-        <div class="column">
-          <div>Items crossed: {{ crossedItems.length }}</div>
-          <div>Items in list: {{ list.length }}</div>
-        </div>
-      </q-toolbar>
     </q-page-sticky>
   </q-page>
 </template>
@@ -124,15 +123,18 @@ export default {
       this.list.unshift({
         title: this.newItem,
         done: false,
-        price: 0,
+        price: '',
         quantity: 1
       })
+      if (this.newItem === '') {
+        this.editItem(0)
+      }
       this.newItem = ''
       this.$q.notify('Item added')
     },
     getTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)
-      return items.reduce(reducerSum, 0)
+      return Math.round(items.reduce(reducerSum, 0) * 100) / 100
     },
     totalPrice(item) {
       return item.price * item.quantity
@@ -166,6 +168,6 @@ export default {
   opacity: 0.5;
 }
 .move-below-bar {
-  margin-top: 106px;
+  margin-top: 147px;
 }
 </style>

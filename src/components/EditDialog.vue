@@ -1,46 +1,36 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
-      <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />
-
-      <q-card-section>
-        <q-btn
-          fab
-          color="primary"
-          icon="camera_alt"
-          class="absolute"
-          style="top: 0; right: 12px; transform: translateY(-50%);"
+      <q-card-section class="col q-pb-none">
+        <q-input
+          v-model="editedItem.title"
+          outlined
+          type="text"
+          label="Title"
+          :rules="[
+            val => (val !== null && val !== '') || 'Please type a item title'
+          ]"
+          @keyup.enter="onOKClick"
         />
-
-        <div class="row ">
-          <q-input
-            v-model="editedItem.title"
-            class="col"
-            type="text"
-            label="Title"
-          />
-        </div>
-      </q-card-section>
-
-      <q-card-section class="row no-wrap q-pt-none">
         <q-input
           v-model.number="editedItem.price"
-          class="col-6 .col-md-auto q-pr-xs"
           type="number"
           label="Price"
-          filled
-          prefix="€"
+          outlined
+          class="q-pt-sm"
+          prefix="CHF"
           :rules="[
             val => (val !== null && val !== '') || 'Please type a price',
             val => val > 0 || 'Please price can not be 0.'
           ]"
+          @keyup.enter="onOKClick"
         />
         <q-input
           v-model.number="editedItem.quantity"
           type="number"
           label="Quantity"
-          filled
-          class="col-6 q-pl-xs"
+          outlined
+          class="q-pt-sm"
           :rules="[
             val => (val !== null && val !== '') || 'Please type a quantity',
             val => val > 0 || 'Please quantity can not be 0.'
