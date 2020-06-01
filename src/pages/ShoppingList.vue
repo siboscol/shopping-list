@@ -1,45 +1,14 @@
 <template>
   <q-page class="column">
     <q-list class="bg-white move-below-bar" separator bordered>
-      <q-item
-        v-for="(item, index) in filterList"
-        :key="index"
-        v-ripple
-        clickable
-        @click.stop="editItem(index)"
-        :class="{ 'done bg-blue-1': item.done }"
-      >
-        <q-item-section avatar>
-          <q-checkbox v-model="item.done" color="primary" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>{{ item.title }}</q-item-label>
-          <q-item-label caption>{{ totalPrice(item) }} CHF</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-item-label caption>Qty: {{ item.quantity }}</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <div class="text-grey-8 q-gutter-xs">
-            <q-btn
-              flat
-              dense
-              round
-              color="primary"
-              icon="edit"
-              @click.stop="editItem(index)"
-            />
-            <q-btn
-              flat
-              dense
-              round
-              color="primary"
-              icon="delete"
-              @click.stop="deleteItem(index)"
-            />
-          </div>
-        </q-item-section>
-      </q-item>
+      <item
+        v-for="(item, key) in items"
+        :key="key"
+        :item="item"
+        :id="key"
+        @edit="editItem"
+        @delete="deleteItem"
+      ></item>
     </q-list>
     <div v-if="!list.length" class="no-items text-center q-my-md">
       <q-icon name="check" size="100px" color="primary" />
@@ -85,17 +54,21 @@
 </template>
 
 <script>
+import Item from '../components/Items/Item'
 import EditDialog from '../components/EditDialog'
+import { mapGetters } from 'vuex'
 
 export default {
+  components: {
+    item: Item
+  },
   data() {
     return {
-      newItem: '',
-      list: []
+      newItem: ''
     }
   },
   methods: {
-    deleteItem(index) {
+    deleteItem(key) {      
       this.$q
         .dialog({
           title: 'Confirm',
@@ -104,18 +77,18 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          this.list.splice(index, 1)
+          delete this.items[key]
           this.$q.notify('Item deleted')
         })
     },
-    editItem(index) {
+    editItem(key) {      
       this.$q
         .dialog({
           component: EditDialog,
-          item: this.list[index]
+          item: this.items[key]
         })
         .onOk(editedItem => {
-          this.list.splice(index, 1, editedItem)
+          this.items[key] = editedItem
           this.$q.notify('Item edited')
         })
     },
@@ -141,6 +114,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      items: 'items',
+      list: 'itemsList'
+    }),
     crossedItems() {
       return this.list.filter(i => i.done === true)
     },
