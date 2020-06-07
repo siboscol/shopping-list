@@ -7,6 +7,9 @@
       <q-icon name="check" size="100px" color="primary" />
       <div class="text-h5 text-primary">No items</div>
     </div>
+    <div class="absolute-bottom text-center q-mb-lg">
+      <q-btn round color="primary" size="lg" icon="add" @click="createItem" />
+    </div>
     <q-page-sticky expand position="top" class="q-px-md">
       <div class="row q-py-sm full-width text-white">
         <div class="column">
@@ -27,10 +30,10 @@
           dense
           bg-color="white"
           outlined
-          @keyup.enter="addItem"
+          @keyup.enter="createItem"
         >
           <template v-slot:after>
-            <q-btn push color="white" text-color="primary" icon="add" @click="addItem" />
+            <q-btn push color="white" text-color="primary" icon="add" @click="createItem" />
           </template>
         </q-input>
       </div>
@@ -40,7 +43,8 @@
 
 <script>
 import Item from '../components/Items/Item'
-import { mapGetters } from 'vuex'
+import EditDialog from '../components/Modals/EditDialog'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -52,18 +56,32 @@ export default {
     }
   },
   methods: {
-    addItem() {
-      this.list.unshift({
-        title: this.newItem,
-        done: false,
-        price: '',
-        quantity: 1
-      })
+    ...mapActions(['addItem']),
+    createItem() {
       if (this.newItem === '') {
-        this.editItem(0)
+        this.promptToAddItem()
+      } else {
+        const newItem = {
+          title: this.newItem,
+          done: false,
+          price: 0,
+          quantity: 1
+        }
+        this.addItem(newItem)
+        this.$q.notify('Item added')
       }
       this.newItem = ''
-      this.$q.notify('Item added')
+    },
+    promptToAddItem() {
+      this.$q
+        .dialog({
+          component: EditDialog,
+          titleDialog: 'Add item'
+        })
+        .onOk(newItem => {
+          this.addItem(newItem)
+          this.$q.notify('Item added')
+        })
     },
     getTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)

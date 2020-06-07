@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import EditDialog from '../EditDialog'
+import EditDialog from '../Modals/EditDialog'
 import { mapActions } from 'vuex'
 
 export default {
@@ -44,7 +44,7 @@ export default {
           cancel: true,
           persistent: true
         })
-        .onOk(() => {
+        .onOk(() => {   
           this.deleteItem(this.id)
           this.$q.notify('Item deleted')
         })
@@ -53,7 +53,8 @@ export default {
       this.$q
         .dialog({
           component: EditDialog,
-          item: this.item
+          item: this.item,
+          titleDialog: 'Edit item'
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })
