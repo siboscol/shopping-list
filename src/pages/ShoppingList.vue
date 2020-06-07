@@ -1,20 +1,11 @@
 <template>
   <q-page class="column">
     <q-list class="bg-white move-below-bar" separator bordered>
-      <item
-        v-for="(item, key) in items"
-        :key="key"
-        :item="item"
-        :id="key"
-        @edit="editItem"
-        @delete="deleteItem"
-      ></item>
+      <item v-for="(item, key) in items" :key="key" :item="item" :id="key"></item>
     </q-list>
     <div v-if="!list.length" class="no-items text-center q-my-md">
       <q-icon name="check" size="100px" color="primary" />
-      <div class="text-h5 text-primary">
-        No items
-      </div>
+      <div class="text-h5 text-primary">No items</div>
     </div>
     <q-page-sticky expand position="top" class="q-px-md">
       <div class="row q-py-sm full-width text-white">
@@ -39,13 +30,7 @@
           @keyup.enter="addItem"
         >
           <template v-slot:after>
-            <q-btn
-              push
-              color="white"
-              text-color="primary"
-              icon="add"
-              @click="addItem"
-            />
+            <q-btn push color="white" text-color="primary" icon="add" @click="addItem" />
           </template>
         </q-input>
       </div>
@@ -55,7 +40,6 @@
 
 <script>
 import Item from '../components/Items/Item'
-import EditDialog from '../components/EditDialog'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -68,30 +52,6 @@ export default {
     }
   },
   methods: {
-    deleteItem(key) {      
-      this.$q
-        .dialog({
-          title: 'Confirm',
-          message: 'Do you really want to delete it?',
-          cancel: true,
-          persistent: true
-        })
-        .onOk(() => {
-          delete this.items[key]
-          this.$q.notify('Item deleted')
-        })
-    },
-    editItem(key) {      
-      this.$q
-        .dialog({
-          component: EditDialog,
-          item: this.items[key]
-        })
-        .onOk(editedItem => {
-          this.items[key] = editedItem
-          this.$q.notify('Item edited')
-        })
-    },
     addItem() {
       this.list.unshift({
         title: this.newItem,
