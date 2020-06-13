@@ -30,7 +30,7 @@
           dense
           bg-color="white"
           outlined
-          @keyup.enter="createItem"
+          @keyup.enter.stop="createItem"
         >
           <template v-slot:after>
             <q-btn push color="white" text-color="primary" icon="add" @click="createItem" />
@@ -43,7 +43,7 @@
 
 <script>
 import Item from '../components/Items/Item'
-import EditDialog from '../components/Modals/EditDialog'
+import AddDialog from '../components/Modals/AddDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -62,7 +62,7 @@ export default {
         this.promptToAddItem()
       } else {
         const newItem = {
-          title: this.newItem,
+          name: this.newItem,
           done: false,
           price: 0,
           quantity: 1
@@ -75,7 +75,7 @@ export default {
     promptToAddItem() {
       this.$q
         .dialog({
-          component: EditDialog,
+          component: AddDialog,
           titleDialog: 'Add item'
         })
         .onOk(newItem => {

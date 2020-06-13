@@ -1,0 +1,35 @@
+<template>
+  <q-input
+    ref="quantity"
+    :value="quantity"
+    @input="$emit('update:quantity', $event)"
+    type="number"
+    label="Quantity"
+    outlined
+    class="q-pt-sm"
+    :rules="[
+            val => (val !== null && val !== '') || 'Please type a quantity',
+            val => val > 0 || 'Please quantity can not be 0.'
+          ]"
+  >
+    <template v-slot:append>
+      <q-btn
+        round
+        dense
+        flat
+        icon="remove"
+        @click="quantity > 1 && $emit('update:quantity', quantity - 1)"
+      />
+      <q-btn round dense flat icon="add" @click="$emit('update:quantity', quantity + 1)" />
+    </template>
+  </q-input>
+</template>
+
+<script>
+export default {
+  props: ['quantity']
+}
+</script>
+
+<style>
+</style>

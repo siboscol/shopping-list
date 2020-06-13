@@ -5,24 +5,24 @@ import store from '.'
 
 const state = {
   items: {
-    // 'id1': {
-    //   title: 'pippo',
-    //   done: false,
-    //   price: '',
-    //   quantity: 1
-    // },
-    // 'id2': {
-    //   title: 'pluto',
-    //   done: false,
-    //   price: 2,
-    //   quantity: 3
-    // },
-    // 'id3': {
-    //   title: 'paperino',
-    //   done: false,
-    //   price: '',
-    //   quantity: 1
-    // }
+    'id1': {
+      name: 'pippo',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id2': {
+      name: 'pluto',
+      done: false,
+      price: 2,
+      quantity: 3
+    },
+    'id3': {
+      name: 'paperino',
+      done: false,
+      price: 0,
+      quantity: 1
+    }
   }
 }
 

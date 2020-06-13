@@ -8,7 +8,7 @@
       />
     </q-item-section>
     <q-item-section>
-      <q-item-label>{{ item.title }} {{ id }}</q-item-label>
+      <q-item-label>{{ item.name }}</q-item-label>
       <q-item-label caption>{{ totalPrice }} CHF</q-item-label>
     </q-item-section>
     <q-item-section side>
@@ -54,7 +54,7 @@ export default {
         .dialog({
           component: EditDialog,
           item: this.item,
-          titleDialog: 'Edit item'
+          id: this.id
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })

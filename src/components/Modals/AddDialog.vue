@@ -1,10 +1,10 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
-      <header-field>Edit Item</header-field>
+      <header-field>Add Item</header-field>
       <q-form @submit="submit" class="q-gutter-md">
         <q-card-section class="col q-pb-none">
-          <name-field ref="nameField" :name.sync="editedItem.name" @submit="submit" />
+          <name-field ref="nameField" :name.sync="editedItem.name" />
           <price-field ref="priceField" :price.sync="editedItem.price" />
           <quantity-field ref="quantityField" :quantity.sync="editedItem.quantity" />
         </q-card-section>
@@ -31,13 +31,14 @@ export default {
     'price-field': PriceField,
     'quantity-field': QuantityField
   },
-  props: {
-    item: Object,
-    id: String
-  },
   data() {
     return {
-      editedItem: {}
+      editedItem: {
+        name: '',
+        price: 0,
+        quantity: 1,
+        done: false
+      }
     }
   },
   methods: {
@@ -80,9 +81,6 @@ export default {
         this.hide()
       }
     }
-  },
-  mounted() {
-    this.editedItem = Object.assign({}, this.item)
   }
 }
 </script>
