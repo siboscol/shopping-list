@@ -23,7 +23,8 @@ const state = {
       price: 0,
       quantity: 1
     }
-  }
+  },
+  search: 'pippo'
 }
 
 const mutations = {
@@ -58,6 +59,26 @@ const actions = {
 const getters = {
   items: state => {
     return state.items
+  },
+  itemsToBuy: state => {
+    const itemsToBuy = {}
+    Object.keys(state.items).forEach(id => {
+      const item = state.items[id]
+      if (!item.done) {
+        itemsToBuy[id] = item
+      }
+    })
+    return itemsToBuy
+  },
+  itemsCart: state => {
+    const itemsCart = {}
+    Object.keys(state.items).forEach(id => {
+      const item = state.items[id]
+      if (item.done) {
+        itemsCart[id] = item
+      }
+    })
+    return itemsCart
   },
   itemsList: state => {
     return Object.keys(state.items).map(item => state.items[item])

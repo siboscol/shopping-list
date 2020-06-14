@@ -1,12 +1,8 @@
 <template>
-  <q-page class="column">
-    <q-list class="bg-white move-below-bar" separator bordered>
-      <item v-for="(item, key) in items" :key="key" :item="item" :id="key"></item>
-    </q-list>
-    <div v-if="!list.length" class="no-items text-center q-my-md">
-      <q-icon name="check" size="100px" color="primary" />
-      <div class="text-h5 text-primary">No items</div>
-    </div>
+  <q-page class="column move-below-bar">
+    <no-items v-if="!itemsToBuyTotal" @addItem="createItem" />
+    <items-to-buy v-else :itemsToBuy="itemsToBuy" />
+    <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
     <div class="absolute-bottom text-center q-mb-lg">
       <q-btn round color="primary" size="lg" icon="add" @click="createItem" />
     </div>
@@ -14,41 +10,36 @@
       <div class="row q-py-sm full-width text-white">
         <div class="column">
           <div class="text-h5">Total</div>
-          <div class="text-subtitle1">{{ list.length }} items</div>
+          <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
         </div>
         <q-space />
         <div class="column">
-          <div class="text-h4">{{ listTotal }}</div>
+          <div class="text-h4">{{ itemsToBuyPrice }}</div>
           <div class="text-subtitle3 text-right">CHF</div>
         </div>
       </div>
-      <div class="row q-py-sm full-width">
-        <q-input
-          v-model="newItem"
-          placeholder="Search/Add item"
-          class="col"
-          dense
-          bg-color="white"
-          outlined
-          @keyup.enter.stop="createItem"
-        >
-          <template v-slot:after>
-            <q-btn push color="white" text-color="primary" icon="add" @click="createItem" />
-          </template>
-        </q-input>
+      <div class="q-py-sm full-width">
+        <search />
       </div>
     </q-page-sticky>
   </q-page>
 </template>
 
 <script>
-import Item from '../components/Items/Item'
+import ItemsToBuy from '../components/Items/ItemsToBuy'
+import ItemsCart from '../components/Items/ItemsCart'
+import NoItems from '../components/Items/NoItems'
 import AddDialog from '../components/Modals/AddDialog'
+import Search from '../components/Tools/Search'
 import { mapGetters, mapActions } from 'vuex'
+import ItemsToBuyVue from '../components/Items/ItemsToBuy.vue'
 
 export default {
   components: {
-    item: Item
+    'items-to-buy': ItemsToBuy,
+    'items-cart': ItemsCart,
+    'no-items': NoItems,
+    'search': Search
   },
   data() {
     return {
@@ -83,30 +74,40 @@ export default {
           this.$q.notify('Item added')
         })
     },
-    getTotal(items) {
+    itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)
-      return Math.round(items.reduce(reducerSum, 0) * 100) / 100
+      const itemsValues = Object.values(items)
+      return Math.round(itemsValues.reduce(reducerSum, 0) * 100) / 100
     },
     totalPrice(item) {
       return item.price * item.quantity
+    },
+    itemsNumber(items) {
+      if (!items) {
+        return 0
+      }
+      return Object.keys(items).length
     }
   },
   computed: {
     ...mapGetters({
-      items: 'items',
-      list: 'itemsList'
+      itemsCart: 'itemsCart',
+      itemsToBuy: 'itemsToBuy'
     }),
-    crossedItems() {
-      return this.list.filter(i => i.done === true)
+    itemsCartTotal() {
+      return this.itemsNumber(this.itemsCart)
     },
-    crossedItemsTotal() {
-      return this.getTotal(this.crossedItems)
+    itemsCartPrice() {
+      return this.itemsPriceTotal(this.itemsCart)
     },
-    listTotal() {
-      return this.getTotal(this.list)
+    itemsToBuyTotal() {
+      return this.itemsNumber(this.itemsToBuy)
+    },
+    itemsToBuyPrice() {
+      return this.itemsPriceTotal(this.itemsToBuy)
     },
     filterList() {
-      return this.list.filter(item => item.title.match(this.newItem))
+      return Object.values(items).filter(item => item.title.match(this.newItem))
     }
   }
 }
