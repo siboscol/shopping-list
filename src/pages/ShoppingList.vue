@@ -1,28 +1,39 @@
 <template>
-  <q-page class="column move-below-bar">
-    <no-items v-if="!itemsToBuyTotal && !search" @addItem="createItem" />
-    <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
-    <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
-    <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
-    <div class="absolute-bottom text-center q-mb-lg">
-      <q-btn round color="primary" size="lg" icon="add" @click="createItem" />
+  <q-page>
+    <div class="absolute full-width full-height column">
+      <div class="q-px-md">
+        <div class="row q-py-sm full-width text-white">
+          <div class="column">
+            <div class="text-h5">Total</div>
+            <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
+          </div>
+          <q-space />
+          <div class="column">
+            <div class="text-h4">{{ itemsToBuyPrice }}</div>
+            <div class="text-subtitle3 text-right">CHF</div>
+          </div>
+        </div>
+        <div class="q-py-sm full-width">
+          <search />
+        </div>
+      </div>
+      <q-scroll-area class="q-scroll-area-items">
+        <no-items v-if="!itemsToBuyTotal && !search" @addItem="createItem" />
+        <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
+        <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
+        <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
+      </q-scroll-area>
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          round
+          color="primary"
+          size="lg"
+          icon="add"
+          @click="createItem"
+          class="all-pointer-events"
+        />
+      </div>
     </div>
-    <q-page-sticky expand position="top" class="q-px-md">
-      <div class="row q-py-sm full-width text-white">
-        <div class="column">
-          <div class="text-h5">Total</div>
-          <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
-        </div>
-        <q-space />
-        <div class="column">
-          <div class="text-h4">{{ itemsToBuyPrice }}</div>
-          <div class="text-subtitle3 text-right">CHF</div>
-        </div>
-      </div>
-      <div class="q-py-sm full-width">
-        <search />
-      </div>
-    </q-page-sticky>
   </q-page>
 </template>
 
@@ -40,7 +51,7 @@ export default {
     'items-to-buy': ItemsToBuy,
     'items-cart': ItemsCart,
     'no-items': NoItems,
-    'search': Search
+    search: Search
   },
   data() {
     return {
@@ -127,5 +138,9 @@ export default {
 }
 .move-below-bar {
   margin-top: 147px;
+}
+.q-scroll-area-items {
+  display: flex;
+  flex-grow: 1;
 }
 </style>

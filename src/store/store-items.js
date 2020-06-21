@@ -22,7 +22,61 @@ const state = {
       done: false,
       price: 0,
       quantity: 1
-    }
+    },
+    'id4': {
+      name: 'pippo',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id5': {
+      name: 'pluto',
+      done: false,
+      price: 2,
+      quantity: 3
+    },
+    'id6': {
+      name: 'paperino',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id7': {
+      name: 'pippo',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id8': {
+      name: 'pluto',
+      done: false,
+      price: 2,
+      quantity: 3
+    },
+    'id9': {
+      name: 'paperino',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id10': {
+      name: 'pippo',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
+    'id11': {
+      name: 'pluto',
+      done: false,
+      price: 2,
+      quantity: 3
+    },
+    'id12': {
+      name: 'paperino',
+      done: false,
+      price: 0,
+      quantity: 1
+    },
   },
   search: ''
 }

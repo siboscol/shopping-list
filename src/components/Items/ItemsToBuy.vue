@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mb-lg">
+  <div>
     <list-header bgColor="bg-primary">List to buy</list-header>
     <q-list class="bg-white" separator bordered>
       <item v-for="(item, key) in itemsToBuy" :key="key" :item="item" :id="key"></item>
