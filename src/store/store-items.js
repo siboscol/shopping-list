@@ -24,7 +24,7 @@ const state = {
       quantity: 1
     }
   },
-  search: 'pippo'
+  search: ''
 }
 
 const mutations = {
@@ -36,6 +36,9 @@ const mutations = {
   },
   addItem(state, payload) {
     Vue.set(state.items, payload.id, payload.item)
+  },
+  setSearch(state, value) {
+    state.search = value
   }
 }
 
@@ -53,40 +56,54 @@ const actions = {
       item: item
     }
     commit('addItem', payload)
+  },
+  setSearch({ commit }, value) {
+    commit('setSearch', value)
   }
 }
 
 const getters = {
-  items: state => {
+  itemsFiltered: state => {
+    const itemsFiltered = {}
+    if (state.search) {
+      Object.keys(state.items).forEach(id => {
+        const item = state.items[id],
+          itemNameLowerCase = item.name.toLowerCase(),
+          searchLowerCase = state.search.toLowerCase()
+        if (itemNameLowerCase.includes(searchLowerCase)) {
+          itemsFiltered[id] = item
+        }
+      })
+      return itemsFiltered
+    }
     return state.items
   },
-  itemsToBuy: state => {
+  itemsToBuy: (state, getters) => {
+    const itemsFiltered = getters.itemsFiltered
     const itemsToBuy = {}
-    Object.keys(state.items).forEach(id => {
-      const item = state.items[id]
+    Object.keys(itemsFiltered).forEach(id => {
+      const item = itemsFiltered[id]
       if (!item.done) {
         itemsToBuy[id] = item
       }
     })
     return itemsToBuy
   },
-  itemsCart: state => {
+  itemsCart: (state, getters) => {
+    const itemsFiltered = getters.itemsFiltered
     const itemsCart = {}
-    Object.keys(state.items).forEach(id => {
-      const item = state.items[id]
+    Object.keys(itemsFiltered).forEach(id => {
+      const item = itemsFiltered[id]
       if (item.done) {
         itemsCart[id] = item
       }
     })
     return itemsCart
-  },
-  itemsList: state => {
-    return Object.keys(state.items).map(item => state.items[item])
   }
 }
 
 export default {
-  namespace: true,
+  namespaced: true,
   state,
   mutations,
   actions,

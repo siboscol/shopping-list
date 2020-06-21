@@ -1,5 +1,5 @@
 <template>
-  <q-input outlined bottom-slots v-model="searchField" label="Search" dense bg-color="white">
+  <q-input outlined v-model="searchField" label="Search" dense bg-color="white">
     <template v-slot:append>
       <q-icon v-if="searchField !== ''" name="close" @click="searchField = ''" class="cursor-pointer" />
       <q-icon name="search" />
@@ -8,13 +8,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState({
-      searchField: state => state.items.search
-    })
+    ...mapState('items', ['search']),
+    searchField: {
+      get() {
+        return this.search
+      },
+      set(value) {
+        this.setSearch(value)
+      }
+    }
+  },
+  methods: {
+    ...mapActions('items', ['setSearch'])
   }
 }
 </script>

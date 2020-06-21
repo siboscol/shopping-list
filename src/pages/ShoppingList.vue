@@ -1,7 +1,8 @@
 <template>
   <q-page class="column move-below-bar">
-    <no-items v-if="!itemsToBuyTotal" @addItem="createItem" />
-    <items-to-buy v-else :itemsToBuy="itemsToBuy" />
+    <no-items v-if="!itemsToBuyTotal && !search" @addItem="createItem" />
+    <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
+    <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
     <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
     <div class="absolute-bottom text-center q-mb-lg">
       <q-btn round color="primary" size="lg" icon="add" @click="createItem" />
@@ -31,7 +32,7 @@ import ItemsCart from '../components/Items/ItemsCart'
 import NoItems from '../components/Items/NoItems'
 import AddDialog from '../components/Modals/AddDialog'
 import Search from '../components/Tools/Search'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import ItemsToBuyVue from '../components/Items/ItemsToBuy.vue'
 
 export default {
@@ -47,7 +48,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addItem']),
+    ...mapActions('items', ['addItem']),
     createItem() {
       if (this.newItem === '') {
         this.promptToAddItem()
@@ -90,7 +91,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
+    ...mapState('items', ['search']),
+    ...mapGetters('items', {
       itemsCart: 'itemsCart',
       itemsToBuy: 'itemsToBuy'
     }),

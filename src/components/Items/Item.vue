@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateItem', 'deleteItem']),
+    ...mapActions('items', ['updateItem', 'deleteItem']),
     promptToDelete() {
       this.$q
         .dialog({
