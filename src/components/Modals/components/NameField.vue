@@ -2,6 +2,7 @@
   <q-input
     ref="name"
     autofocus
+    v-select-all
     :value="name"
     @input="$emit('update:name', $event)"
     outlined
@@ -16,8 +17,13 @@
 </template>
 
 <script>
+import { selectAll } from 'src/directives/select-all'
+
 export default {
-  props: ['name']
+  props: ['name'],
+  directives: {
+    selectAll
+  }
 }
 </script>
 
