@@ -110,12 +110,6 @@ export default {
     color: #bbb;
   }
 }
-.no-items {
-  opacity: 0.5;
-}
-.move-below-bar {
-  margin-top: 147px;
-}
 .q-scroll-area-items {
   display: flex;
   flex-grow: 1;
