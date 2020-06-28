@@ -1,157 +1,103 @@
 <template>
-  <q-page class="column">
-    <q-list class="bg-white move-below-bar" separator bordered>
-      <q-item
-        v-for="(item, index) in filterList"
-        :key="index"
-        v-ripple
-        clickable
-        @click.stop="editItem(index)"
-        :class="{ 'done bg-blue-1': item.done }"
-      >
-        <q-item-section avatar>
-          <q-checkbox v-model="item.done" color="primary" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>{{ item.title }}</q-item-label>
-          <q-item-label caption>{{ totalPrice(item) }} CHF</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-item-label caption>Qty: {{ item.quantity }}</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <div class="text-grey-8 q-gutter-xs">
-            <q-btn
-              flat
-              dense
-              round
-              color="primary"
-              icon="edit"
-              @click.stop="editItem(index)"
-            />
-            <q-btn
-              flat
-              dense
-              round
-              color="primary"
-              icon="delete"
-              @click.stop="deleteItem(index)"
-            />
+  <q-page>
+    <div class="absolute full-width full-height column">
+      <div class="q-px-md">
+        <div class="row q-py-sm full-width text-white">
+          <div class="column">
+            <div class="text-h5">Total</div>
+            <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
           </div>
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <div v-if="!list.length" class="no-items text-center q-my-md">
-      <q-icon name="check" size="100px" color="primary" />
-      <div class="text-h5 text-primary">
-        No items
+          <q-space />
+          <div class="column">
+            <div class="text-h4">{{ itemsToBuyPrice }}</div>
+            <div class="text-subtitle3 text-right">CHF</div>
+          </div>
+        </div>
+        <div class="q-py-sm full-width">
+          <search />
+        </div>
+      </div>
+      <q-scroll-area class="q-scroll-area-items">
+        <no-items v-if="!itemsToBuyTotal && !search" @addItem="createItem" />
+        <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
+        <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
+        <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
+      </q-scroll-area>
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          round
+          color="primary"
+          size="lg"
+          icon="add"
+          @click="createItem"
+          class="all-pointer-events"
+        />
       </div>
     </div>
-    <q-page-sticky expand position="top" class="q-px-md">
-      <div class="row q-py-sm full-width text-white">
-        <div class="column">
-          <div class="text-h5">Total</div>
-          <div class="text-subtitle1">{{ list.length }} items</div>
-        </div>
-        <q-space />
-        <div class="column">
-          <div class="text-h4">{{ listTotal }}</div>
-          <div class="text-subtitle3 text-right">CHF</div>
-        </div>
-      </div>
-      <div class="row q-py-sm full-width">
-        <q-input
-          v-model="newItem"
-          placeholder="Search/Add item"
-          class="col"
-          dense
-          bg-color="white"
-          outlined
-          @keyup.enter="addItem"
-        >
-          <template v-slot:after>
-            <q-btn
-              push
-              color="white"
-              text-color="primary"
-              icon="add"
-              @click="addItem"
-            />
-          </template>
-        </q-input>
-      </div>
-    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
-import EditDialog from '../components/EditDialog'
+import ItemsToBuy from '../components/Items/ItemsToBuy'
+import ItemsCart from '../components/Items/ItemsCart'
+import NoItems from '../components/Items/NoItems'
+import AddDialog from '../components/Modals/AddDialog'
+import Search from '../components/Tools/Search'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import ItemsToBuyVue from '../components/Items/ItemsToBuy.vue'
 
 export default {
-  data() {
-    return {
-      newItem: '',
-      list: []
-    }
+  components: {
+    'items-to-buy': ItemsToBuy,
+    'items-cart': ItemsCart,
+    'no-items': NoItems,
+    search: Search
   },
   methods: {
-    deleteItem(index) {
+    ...mapActions('items', ['addItem']),
+    createItem() {
       this.$q
         .dialog({
-          title: 'Confirm',
-          message: 'Do you really want to delete it?',
-          cancel: true,
-          persistent: true
+          component: AddDialog,
+          titleDialog: 'Add item'
         })
-        .onOk(() => {
-          this.list.splice(index, 1)
-          this.$q.notify('Item deleted')
+        .onOk(newItem => {
+          this.addItem(newItem)
+          this.$q.notify('Item added')
         })
     },
-    editItem(index) {
-      this.$q
-        .dialog({
-          component: EditDialog,
-          item: this.list[index]
-        })
-        .onOk(editedItem => {
-          this.list.splice(index, 1, editedItem)
-          this.$q.notify('Item edited')
-        })
-    },
-    addItem() {
-      this.list.unshift({
-        title: this.newItem,
-        done: false,
-        price: '',
-        quantity: 1
-      })
-      if (this.newItem === '') {
-        this.editItem(0)
-      }
-      this.newItem = ''
-      this.$q.notify('Item added')
-    },
-    getTotal(items) {
+    itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)
-      return Math.round(items.reduce(reducerSum, 0) * 100) / 100
+      const itemsValues = Object.values(items)
+      return Math.round(itemsValues.reduce(reducerSum, 0) * 100) / 100
     },
     totalPrice(item) {
       return item.price * item.quantity
+    },
+    itemsNumber(items) {
+      if (!items) {
+        return 0
+      }
+      return Object.keys(items).length
     }
   },
   computed: {
-    crossedItems() {
-      return this.list.filter(i => i.done === true)
+    ...mapState('items', ['search']),
+    ...mapGetters('items', {
+      itemsCart: 'itemsCart',
+      itemsToBuy: 'itemsToBuy'
+    }),
+    itemsCartTotal() {
+      return this.itemsNumber(this.itemsCart)
     },
-    crossedItemsTotal() {
-      return this.getTotal(this.crossedItems)
+    itemsCartPrice() {
+      return this.itemsPriceTotal(this.itemsCart)
     },
-    listTotal() {
-      return this.getTotal(this.list)
+    itemsToBuyTotal() {
+      return this.itemsNumber(this.itemsToBuy)
     },
-    filterList() {
-      return this.list.filter(item => item.title.match(this.newItem))
+    itemsToBuyPrice() {
+      return this.itemsPriceTotal(this.itemsToBuy)
     }
   }
 }
@@ -164,10 +110,8 @@ export default {
     color: #bbb;
   }
 }
-.no-items {
-  opacity: 0.5;
-}
-.move-below-bar {
-  margin-top: 147px;
+.q-scroll-area-items {
+  display: flex;
+  flex-grow: 1;
 }
 </style>

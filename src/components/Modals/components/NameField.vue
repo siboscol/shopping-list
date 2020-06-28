@@ -1,0 +1,31 @@
+<template>
+  <q-input
+    ref="name"
+    autofocus
+    v-select-all
+    :value="name"
+    @input="$emit('update:name', $event)"
+    outlined
+    type="text"
+    label="Name"
+    clearable
+    clear-icon="close"
+    :rules="[
+            val => (val !== null && val !== '') || 'Please type a name for the item'
+          ]"
+  />
+</template>
+
+<script>
+import { selectAll } from 'src/directives/select-all'
+
+export default {
+  props: ['name'],
+  directives: {
+    selectAll
+  }
+}
+</script>
+
+<style>
+</style>
