@@ -111,6 +111,6 @@ export default {
 
 <style lang="scss">
 .hero-image {
-  height: 197px;
+  height: 184px;
 }
 </style>

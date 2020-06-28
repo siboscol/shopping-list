@@ -53,29 +53,9 @@ export default {
     'no-items': NoItems,
     search: Search
   },
-  data() {
-    return {
-      newItem: ''
-    }
-  },
   methods: {
     ...mapActions('items', ['addItem']),
     createItem() {
-      if (this.newItem === '') {
-        this.promptToAddItem()
-      } else {
-        const newItem = {
-          name: this.newItem,
-          done: false,
-          price: 0,
-          quantity: 1
-        }
-        this.addItem(newItem)
-        this.$q.notify('Item added')
-      }
-      this.newItem = ''
-    },
-    promptToAddItem() {
       this.$q
         .dialog({
           component: AddDialog,
@@ -118,9 +98,6 @@ export default {
     },
     itemsToBuyPrice() {
       return this.itemsPriceTotal(this.itemsToBuy)
-    },
-    filterList() {
-      return Object.values(items).filter(item => item.title.match(this.newItem))
     }
   }
 }
