@@ -1,9 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-img
-      src="statics/mountains.jpg"
-      class="fixed-top hero-image"
-    ></q-img>
+    <q-img src="statics/mountains.jpg" class="fixed-top hero-image"></q-img>
     <q-header class="bg-transparent">
       <q-toolbar>
         <q-btn
@@ -14,17 +11,8 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-toolbar-title>
-          My Shopping list
-        </q-toolbar-title>
-        <q-btn
-          flat
-          to="/auth"
-          v-if="!isLoggedIn"
-          dense
-          icon-right="account_circle"
-          label="Login"
-        />
+        <q-toolbar-title>My Shopping list</q-toolbar-title>
+        <q-btn flat to="/auth" v-if="!isLoggedIn" dense icon-right="account_circle" label="Login" />
         <q-btn
           flat
           v-else
@@ -36,12 +24,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      :width="250"
-      :breakpoint="600"
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above :width="250" :breakpoint="600">
       <q-scroll-area
         style="height: calc(100% - 176px); margin-top: 176px; border-right: 1px solid #ddd"
       >
@@ -51,27 +34,26 @@
               <q-icon name="list" />
             </q-item-section>
 
-            <q-item-section>
-              Shopping list
-            </q-item-section>
+            <q-item-section>Shopping list</q-item-section>
           </q-item>
           <q-item to="help" exact clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="help" />
             </q-item-section>
 
-            <q-item-section>
-              Help
+            <q-item-section>Help</q-item-section>
+          </q-item>
+          <q-item to="settings" exact clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="settings" />
             </q-item-section>
+
+            <q-item-section>Settings</q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
 
-      <q-img
-        class="absolute-top"
-        src="statics/mountains.jpg"
-        style="height: 176px"
-      >
+      <q-img class="absolute-top" src="statics/mountains.jpg" style="height: 176px">
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img src="statics/doubleb.png" />

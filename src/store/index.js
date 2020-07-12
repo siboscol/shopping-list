@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import items from './store-items'
+import settings from './store-settings'
 
 Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      items
+      items,
+      settings
     },
 
     // enable strict mode (adds overhead!)
