@@ -6,6 +6,7 @@
 
 <script>
 import { firebaseAuth } from 'boot/firebase'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
@@ -15,11 +16,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions('settings', ['getSettings']),
     logout() {
       firebaseAuth.signOut()
     }
   },
   mounted() {
+    this.getSettings()
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         this.isLoggedIn = true

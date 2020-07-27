@@ -18,7 +18,10 @@
         </div>
       </div>
       <q-scroll-area class="q-scroll-area-items">
-        <no-items v-if="!itemsToBuyTotal && !search" @addItem="createItem" />
+        <no-items
+          v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
+          @addItem="createItem"
+        />
         <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
         <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
         <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
@@ -87,6 +90,7 @@ export default {
       itemsCart: 'itemsCart',
       itemsToBuy: 'itemsToBuy'
     }),
+    ...mapGetters('settings', ['settings']),
     itemsCartTotal() {
       return this.itemsNumber(this.itemsCart)
     },
