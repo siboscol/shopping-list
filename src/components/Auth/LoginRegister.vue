@@ -76,23 +76,17 @@ export default {
       this.$refs.email.validate()
       this.$refs.password.validate()
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
-        try {
-          this.$q.loading.show()
-          if (this.panel === 'login') {
-            await this.loginUser(this.formData)
-          } else {
-            await this.registerUser(this.formData)
-          }
-          this.$q.loading.hide()
-        } catch (error) {
-          console.log('Error Registering', error)
+        if (this.panel === 'login') {
+          await this.loginUser(this.formData)
+        } else {
+          await this.registerUser(this.formData)
         }
       }
     },
     isValidEmail(email) {
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
-    },
+    }
   },
   filters: {
     titleCase(val) {
