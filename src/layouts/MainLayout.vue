@@ -12,15 +12,8 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
         <q-toolbar-title>My Shopping list</q-toolbar-title>
-        <q-btn flat to="/auth" v-if="!isLoggedIn" dense icon-right="account_circle" label="Login" />
-        <q-btn
-          flat
-          v-else
-          icon-right="account_circle"
-          label="Logout"
-          dense
-          @click="$emit('logout')"
-        />
+        <q-btn flat to="/auth" v-if="!loggedIn" dense icon-right="account_circle" label="Login" />
+        <q-btn flat v-else icon-right="account_circle" label="Logout" dense @click="logoutUser" />
       </q-toolbar>
     </q-header>
 
@@ -73,20 +66,24 @@
 
 <script>
 import { date } from 'quasar'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainLayout',
-  props: ['isLoggedIn'],
   data() {
     return {
       leftDrawerOpen: false
     }
   },
   computed: {
+    ...mapState('auth', ['loggedIn']),
     todaysDate() {
       const timestamp = Date.now()
       return date.formatDate(timestamp, 'dddd D MMMM')
     }
+  },
+  methods: {
+    ...mapActions('auth', ['logoutUser'])
   }
 }
 </script>

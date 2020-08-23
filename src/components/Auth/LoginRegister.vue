@@ -57,8 +57,7 @@
 </template>
 
 <script>
-import { firebaseAuth } from 'boot/firebase'
-import { showErrorMessage } from 'src/utils/showErrorMessage'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Register',
@@ -72,50 +71,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions('auth', ['registerUser', 'loginUser']),
     async submitForm() {
       this.$refs.email.validate()
       this.$refs.password.validate()
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
-        try {
-          this.$q.loading.show()
-          if (this.panel === 'login') {
-            await this.login()
-          } else {
-            await this.register()
-          }
-          this.$q.loading.hide()
-        } catch (error) {
-          console.log('Error Registering', error)
+        if (this.panel === 'login') {
+          await this.loginUser(this.formData)
+        } else {
+          await this.registerUser(this.formData)
         }
       }
     },
     isValidEmail(email) {
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
-    },
-    async login() {
-      try {
-        const res = await firebaseAuth.signInWithEmailAndPassword(
-          this.formData.email,
-          this.formData.password
-        )
-        console.log('Logged in', res)
-      } catch (error) {
-        console.log('Error Logging in', error)
-        showErrorMessage(error.message)
-      }
-    },
-    async register() {
-      try {
-        const res = await firebaseAuth.createUserWithEmailAndPassword(
-          this.formData.email,
-          this.formData.password
-        )
-        console.log('Registered', res)
-      } catch (error) {
-        console.log('Error Registering', error)
-        showErrorMessage(error.message)
-      }
     }
   },
   filters: {
