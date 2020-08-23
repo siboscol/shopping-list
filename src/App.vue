@@ -1,6 +1,6 @@
 <template>
   <div id="q-app">
-    <router-view :isLoggedIn="isLoggedIn" @logout="logout" />
+    <router-view />
   </div>
 </template>
 
@@ -17,23 +17,11 @@ export default {
   },
   methods: {
     ...mapActions('settings', ['getSettings']),
-    logout() {
-      firebaseAuth.signOut()
-    }
+    ...mapActions('auth', ['handleAuthStateChange'])
   },
   mounted() {
     this.getSettings()
-    firebaseAuth.onAuthStateChanged(user => {
-      if (user) {
-        this.isLoggedIn = true
-        this.$q.localStorage.set('loggedIn', true)
-        this.$router.push('/').catch(err => {})
-      } else {
-        this.isLoggedIn = false
-        this.$q.localStorage.set('loggedIn', false)
-        this.$router.replace('/auth').catch(err => {})
-      }
-    })
+    this.handleAuthStateChange()
   }
 }
 </script>
