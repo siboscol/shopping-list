@@ -1,8 +1,8 @@
 <template>
   <q-input
     ref="quantity"
-    :value="quantity"
-    @input="$emit('update:quantity', $event)"
+    :value="value"
+    @input="$emit('input', $event)"
     type="number"
     label="Quantity"
     outlined
@@ -18,16 +18,17 @@
         dense
         flat
         icon="remove"
-        @click="quantity > 1 && $emit('update:quantity', quantity - 1)"
+        @click="value > 1 && $emit('input', value - 1)"
       />
-      <q-btn round dense flat icon="add" @click="$emit('update:quantity', quantity + 1)" />
+      <q-btn round dense flat icon="add" @click="$emit('input', value + 1)" />
     </template>
   </q-input>
 </template>
 
 <script>
 export default {
-  props: ['quantity']
+  name: 'QuatityField',
+  props: ['value']
 }
 </script>
 

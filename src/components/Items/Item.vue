@@ -47,7 +47,6 @@ export default {
         })
         .onOk(() => {
           this.deleteItem(this.id)
-          this.$q.notify('Item deleted')
         })
     },
     editItem() {
@@ -59,7 +58,6 @@ export default {
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })
-          this.$q.notify('Item edited')
         })
     }
   },

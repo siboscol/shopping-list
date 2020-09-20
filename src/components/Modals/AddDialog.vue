@@ -4,9 +4,9 @@
       <header-field>Add Item</header-field>
       <q-form @submit="submit" class="q-gutter-md">
         <q-card-section class="col q-pb-none">
-          <name-field ref="nameField" :name.sync="editedItem.name" />
-          <price-field ref="priceField" :price.sync="editedItem.price" />
-          <quantity-field ref="quantityField" :quantity.sync="editedItem.quantity" />
+          <name-field ref="nameField" v-model="editedItem.name" />
+          <price-field ref="priceField" v-model="editedItem.price" />
+          <quantity-field ref="quantityField" v-model="editedItem.quantity" />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn color="primary" flat type="reset" label="Cancel" @click="onCancelClick" />

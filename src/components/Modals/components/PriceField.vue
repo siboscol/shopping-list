@@ -1,8 +1,9 @@
 <template>
   <q-input
     ref="price"
-    :value="price"
-    @input="$emit('update:price', $event)"
+    v-model.number="price"
+    v-select-all
+    @input="$emit('input', $event)"
     type="number"
     label="Price"
     outlined
@@ -17,8 +18,19 @@
 </template>
 
 <script>
+import { selectAll } from 'src/directives/select-all'
+
 export default {
-  props: ['price']
+  name: 'PriceField',
+  props: ['value'],
+  data() {
+    return {
+      price: this.value
+    }
+  },
+  directives: {
+    selectAll
+  }
 }
 </script>
 

@@ -66,7 +66,6 @@ export default {
         })
         .onOk(newItem => {
           this.addItem(newItem)
-          this.$q.notify('Item added')
         })
     },
     itemsPriceTotal(items) {
