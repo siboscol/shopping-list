@@ -2,17 +2,17 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <header-field>Add Item</header-field>
-      <q-form @submit="submit" class="q-gutter-md">
+      <form @submit="submit" class="q-gutter-md" novalidate="true">
         <q-card-section class="col q-pb-none">
           <name-field ref="nameField" v-model="editedItem.name" />
           <price-field ref="priceField" v-model="editedItem.price" />
           <quantity-field ref="quantityField" v-model="editedItem.quantity" />
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn color="primary" flat type="reset" label="Cancel" @click="onCancelClick" />
+          <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
           <q-btn color="primary" flat type="submit" label="Save" />
         </q-card-actions>
-      </q-form>
+      </form>
     </q-card>
   </q-dialog>
 </template>
@@ -61,7 +61,7 @@ export default {
       // we just need to hide dialog
       this.hide()
     },
-    submit() {
+    submit(e) {
       this.$refs.nameField.$refs.name.validate()
       this.$refs.priceField.$refs.price.validate()
       this.$refs.quantityField.$refs.quantity.validate()
@@ -70,6 +70,8 @@ export default {
         !this.$refs.priceField.$refs.price.hasError ||
         !this.$refs.quantityField.$refs.quantity.hasError
       ) {
+        // To avoid page reload
+        e.preventDefault();
         // on Save, it is REQUIRED to
         // emit "ok" event (with optional payload)
         // before hiding the QDialog

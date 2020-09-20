@@ -69,6 +69,7 @@ export default {
         !this.$refs.priceField.$refs.price.hasError ||
         !this.$refs.quantityField.$refs.quantity.hasError
       ) {
+        // To avoid page reload
         e.preventDefault();
         // on Save, it is REQUIRED to
         // emit "ok" event (with optional payload)
