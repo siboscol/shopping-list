@@ -71,7 +71,7 @@ export default {
         !this.$refs.quantityField.$refs.quantity.hasError
       ) {
         // To avoid page reload
-        e.preventDefault();
+        e.preventDefault()
         // on Save, it is REQUIRED to
         // emit "ok" event (with optional payload)
         // before hiding the QDialog

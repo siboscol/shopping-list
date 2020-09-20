@@ -32,7 +32,7 @@ export default {
   computed: {
     ...mapState('items', ['search']),
     totalPrice() {
-      return this.item.price * this.item.quantity
+      return parseFloat((this.item.price * this.item.quantity).toFixed(2))
     }
   },
   methods: {
