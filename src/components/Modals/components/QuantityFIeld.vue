@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'QuatityField',
+  name: 'QuantityField',
   props: ['value']
 }
 </script>
