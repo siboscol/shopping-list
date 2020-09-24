@@ -11,8 +11,8 @@
     clearable
     clear-icon="close"
     :rules="[
-            val => (val !== null && val !== '') || 'Please type a name for the item'
-          ]"
+      val => (val !== null && val !== '') || 'Please type a name for the item'
+    ]"
   />
 </template>
 

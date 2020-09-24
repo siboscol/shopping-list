@@ -2,17 +2,15 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <header-field>Edit Item</header-field>
-      <form @submit="submit" class="q-gutter-md" novalidate="true">
-        <q-card-section class="col q-pb-none">
-          <name-field ref="nameField" v-model="editedItem.name" />
-          <price-field ref="priceField" v-model="editedItem.price" />
-          <quantity-field ref="quantityField" v-model="editedItem.quantity" />
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
-          <q-btn color="primary" flat type="submit" label="Save" />
-        </q-card-actions>
-      </form>
+      <q-card-section class="col q-pb-none">
+        <name-field ref="nameField" v-model="editedItem.name" />
+        <price-field ref="priceField" v-model="editedItem.price" />
+        <quantity-field ref="quantityField" v-model="editedItem.quantity" />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
+        <q-btn color="primary" flat label="Save" @click="onSaveClick" />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -32,8 +30,7 @@ export default {
     'quantity-field': QuantityField
   },
   props: {
-    item: Object,
-    id: String
+    item: Object
   },
   data() {
     return {
@@ -60,7 +57,7 @@ export default {
       // we just need to hide dialog
       this.hide()
     },
-    submit(e) {
+    onSaveClick() {
       this.$refs.nameField.$refs.name.validate()
       this.$refs.priceField.$refs.price.validate()
       this.$refs.quantityField.$refs.quantity.validate()
@@ -69,8 +66,6 @@ export default {
         !this.$refs.priceField.$refs.price.hasError ||
         !this.$refs.quantityField.$refs.quantity.hasError
       ) {
-        // To avoid page reload
-        e.preventDefault();
         // on Save, it is REQUIRED to
         // emit "ok" event (with optional payload)
         // before hiding the QDialog

@@ -54,7 +54,6 @@ export default {
         .dialog({
           component: EditDialog,
           item: this.item,
-          id: this.id
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })
