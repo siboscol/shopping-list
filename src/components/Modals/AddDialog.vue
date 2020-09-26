@@ -1,8 +1,8 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
+  <q-dialog ref="dialog" @hide="onDialogHide" position="top">
     <q-card class="q-dialog-plugin">
       <header-field>Add Item</header-field>
-      <q-card-section class="col q-pb-none">
+      <q-card-section class="col q-pb-none" @keyup.enter="onSaveClick">
         <name-field ref="nameField" v-model="editedItem.name" />
         <price-field ref="priceField" v-model="editedItem.price" />
         <quantity-field ref="quantityField" v-model="editedItem.quantity" />
@@ -33,7 +33,7 @@ export default {
     return {
       editedItem: {
         name: '',
-        price: 0,
+        price: '',
         quantity: 1,
         done: false
       }
