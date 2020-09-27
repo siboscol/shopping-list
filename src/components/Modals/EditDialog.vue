@@ -4,12 +4,14 @@
       <header-field>Edit Item</header-field>
       <q-card-section class="col q-pb-none" @keyup.enter="onSaveClick">
         <name-field ref="nameField" v-model="editedItem.name" />
-        <price-field ref="priceField" v-model="editedItem.price" />
-        <quantity-field ref="quantityField" v-model="editedItem.quantity" />
+        <div class="row">
+          <price-field class="col-6 q-pr-sm" ref="priceField" v-model="editedItem.price" />
+          <quantity-field class="col-6" ref="quantityField" v-model="editedItem.quantity" />
+        </div>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
-        <q-btn color="primary" flat label="Save" @click="onSaveClick" />
+        <q-btn color="primary" push label="Save" @click="onSaveClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>
