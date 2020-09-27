@@ -32,7 +32,7 @@ export default {
   computed: {
     ...mapState('items', ['search']),
     totalPrice() {
-      return this.item.price * this.item.quantity
+      return parseFloat((this.item.price * this.item.quantity).toFixed(2))
     }
   },
   methods: {
@@ -47,7 +47,6 @@ export default {
         })
         .onOk(() => {
           this.deleteItem(this.id)
-          this.$q.notify('Item deleted')
         })
     },
     editItem() {
@@ -55,11 +54,9 @@ export default {
         .dialog({
           component: EditDialog,
           item: this.item,
-          id: this.id
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })
-          this.$q.notify('Item edited')
         })
     }
   },

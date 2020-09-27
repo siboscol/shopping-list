@@ -3,16 +3,16 @@
     ref="name"
     autofocus
     v-select-all
-    :value="name"
-    @input="$emit('update:name', $event)"
+    :value="value"
+    @input="$emit('input', $event)"
     outlined
     type="text"
     label="Name"
     clearable
     clear-icon="close"
     :rules="[
-            val => (val !== null && val !== '') || 'Please type a name for the item'
-          ]"
+      val => (val !== null && val !== '') || 'Please type a name for the item'
+    ]"
   />
 </template>
 
@@ -20,7 +20,7 @@
 import { selectAll } from 'src/directives/select-all'
 
 export default {
-  props: ['name'],
+  props: ['value'],
   directives: {
     selectAll
   }

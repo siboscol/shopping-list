@@ -1,5 +1,5 @@
 <template>
-  <q-card-section class="row">
+  <q-card-section class="row q-pb-sm">
     <div class="text-h6"><slot></slot></div>
     <q-space />
     <q-btn flat round dense icon="close" v-close-popup />

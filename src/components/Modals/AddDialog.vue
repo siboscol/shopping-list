@@ -1,18 +1,18 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
+  <q-dialog ref="dialog" @hide="onDialogHide" position="top">
     <q-card class="q-dialog-plugin">
       <header-field>Add Item</header-field>
-      <q-form @submit="submit" class="q-gutter-md">
-        <q-card-section class="col q-pb-none">
-          <name-field ref="nameField" :name.sync="editedItem.name" />
-          <price-field ref="priceField" :price.sync="editedItem.price" />
-          <quantity-field ref="quantityField" :quantity.sync="editedItem.quantity" />
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn color="primary" flat type="reset" label="Cancel" @click="onCancelClick" />
-          <q-btn color="primary" flat type="submit" label="Save" />
-        </q-card-actions>
-      </q-form>
+      <q-card-section class="col q-pb-none" @keyup.enter="onSaveClick">
+        <name-field ref="nameField" v-model="editedItem.name" />
+        <div class="row">
+          <price-field class="col-6 q-pr-sm" ref="priceField" v-model="editedItem.price" />
+          <quantity-field class="col-6" ref="quantityField" v-model="editedItem.quantity" />
+        </div>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
+        <q-btn color="primary" push label="Save" @click="onSaveClick" />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -35,7 +35,7 @@ export default {
     return {
       editedItem: {
         name: '',
-        price: 0,
+        price: '',
         quantity: 1,
         done: false
       }
@@ -61,7 +61,7 @@ export default {
       // we just need to hide dialog
       this.hide()
     },
-    submit() {
+    onSaveClick() {
       this.$refs.nameField.$refs.name.validate()
       this.$refs.priceField.$refs.price.validate()
       this.$refs.quantityField.$refs.quantity.validate()
