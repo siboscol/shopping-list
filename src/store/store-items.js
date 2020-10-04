@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import { uid } from 'quasar'
-import { storage } from 'firebase'
-import store from '.'
 import { firebaseDb, firebaseAuth } from 'boot/firebase'
 
 const state = {
@@ -25,7 +23,8 @@ const state = {
     //   quantity: 1
     // },
   },
-  search: ''
+  search: '',
+  itemsDownloaded: false
 }
 
 const mutations = {
@@ -40,6 +39,9 @@ const mutations = {
   },
   setSearch(state, value) {
     state.search = value
+  },
+  setItemsDownloaded(state, value) {
+    state.itemsDownloaded = value
   }
 }
 
@@ -64,6 +66,11 @@ const actions = {
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
     const userItems = firebaseDb.ref('items/' + userId)
+
+    // initial check for data
+    userItems.once('value', snapshot => {
+      commit('setItemsDownloaded', true)
+    })
 
     // Child Added
     userItems.on('child_added', snapshot => {
