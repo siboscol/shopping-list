@@ -44,19 +44,19 @@ const mutations = {
 }
 
 const actions = {
-  updateItem({ commit }, payload) {
-    commit('updateItem', payload)
+  updateItem({ dispatch }, payload) {
+    dispatch('fbUpdateItem', payload)
   },
-  deleteItem({ commit }, id) {
-    commit('deleteItem', id)
+  deleteItem({ dispatch }, id) {
+    dispatch('fbDeleteItem', id)
   },
-  addItem({ commit }, item) {
+  addItem({ dispatch }, item) {
     const itemId = uid()
     const payload = {
       id: itemId,
       item: item
     }
-    commit('addItem', payload)
+    dispatch('fbAddItem', payload)
   },
   setSearch({ commit }, value) {
     commit('setSearch', value)
@@ -87,12 +87,26 @@ const actions = {
       commit('updateItem', payload)
     })
 
-    
     // Child Removed
     userItems.on('child_removed', snapshot => {
       const itemId = snapshot.key
       commit('deleteItem', itemId)
     })
+  },
+  fbAddItem({}, payload) {
+    const userId = firebaseAuth.currentUser.uid
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    itemRef.set(payload.item)
+  },
+  fbUpdateItem({}, payload) {
+    const userId = firebaseAuth.currentUser.uid
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    itemRef.update(payload.updates)
+  },
+  fbDeleteItem({}, itemId) {
+    const userId = firebaseAuth.currentUser.uid
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
+    itemRef.remove()
   }
 }
 
