@@ -32,6 +32,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-build.sh
+build_apk.sh
 my-release-key.keystore
-ShoppingList.apk
+ShoppingListApp.apk

@@ -1,41 +1,56 @@
 <template>
   <q-page>
-    <div class="absolute full-width full-height column">
-      <div class="q-px-md">
-        <div class="row q-py-sm full-width text-white">
-          <div class="column">
-            <div class="text-h5">Total</div>
-            <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
+    <div
+      class="absolute full-width full-height column"
+      :class="{ 'bg-white': !itemsDownloaded }"
+    >
+      <template v-if="itemsDownloaded">
+        <div class="q-px-md">
+          <div class="row q-py-sm full-width text-white">
+            <div class="column">
+              <div class="text-h5">Total</div>
+              <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
+            </div>
+            <q-space />
+            <div class="column">
+              <div class="text-h4">{{ itemsToBuyPrice }}</div>
+              <div class="text-subtitle3 text-right">CHF</div>
+            </div>
           </div>
-          <q-space />
-          <div class="column">
-            <div class="text-h4">{{ itemsToBuyPrice }}</div>
-            <div class="text-subtitle3 text-right">CHF</div>
+          <div class="q-py-sm full-width">
+            <search />
           </div>
         </div>
-        <div class="q-py-sm full-width">
-          <search />
+        <q-scroll-area class="q-scroll-area-items">
+          <no-items
+            v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
+            @addItem="createItem"
+          />
+          <p
+            v-if="search && !itemsToBuyTotal && !itemsCartTotal"
+            class="q-pa-md"
+          >
+            No search results.
+          </p>
+          <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
+          <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
+        </q-scroll-area>
+        <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+          <q-btn
+            round
+            color="primary"
+            size="lg"
+            icon="add"
+            @click="createItem"
+            class="all-pointer-events"
+          />
         </div>
-      </div>
-      <q-scroll-area class="q-scroll-area-items">
-        <no-items
-          v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
-          @addItem="createItem"
-        />
-        <p v-if="search && !itemsToBuyTotal && !itemsCartTotal" class="q-pa-md">No search results.</p>
-        <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
-        <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
-      </q-scroll-area>
-      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
-        <q-btn
-          round
-          color="primary"
-          size="lg"
-          icon="add"
-          @click="createItem"
-          class="all-pointer-events"
-        />
-      </div>
+      </template>
+      <template v-else>
+        <span class="absolute-center">
+          <q-spinner-oval color="primary" size="3em" />
+        </span>
+      </template>
     </div>
   </q-page>
 </template>
@@ -84,7 +99,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('items', ['search']),
+    ...mapState('items', ['search', 'itemsDownloaded']),
     ...mapGetters('items', {
       itemsCart: 'itemsCart',
       itemsToBuy: 'itemsToBuy'

@@ -12,7 +12,7 @@ const mutations = {
   }
 }
 const actions = {
-  async registerUser({}, payload) {
+  async registerUser({ }, payload) {
     try {
       Loading.show()
       const res = await firebaseAuth.createUserWithEmailAndPassword(
@@ -25,7 +25,7 @@ const actions = {
       showErrorMessage(error.message)
     }
   },
-  async loginUser({}, payload) {
+  async loginUser({ }, payload) {
     try {
       Loading.show()
       const res = await firebaseAuth.signInWithEmailAndPassword(
@@ -41,17 +41,19 @@ const actions = {
   logoutUser() {
     firebaseAuth.signOut()
   },
-  handleAuthStateChange({ commit }) {
+  handleAuthStateChange({ commit, dispatch }) {
     firebaseAuth.onAuthStateChanged(user => {
       Loading.hide()
       if (user) {
         commit('setLoggedIn', true)
         LocalStorage.set('loggedIn', true)
-        this.$router.push('/').catch(err => {})
+        this.$router.push('/').catch(err => { })
+        dispatch('items/fbReadData', null, { root: true })
       } else {
+        commit('items/setItemsDownloaded', false, { root: true })
         commit('setLoggedIn', false)
         LocalStorage.set('loggedIn', false)
-        this.$router.replace('/auth').catch(err => {})
+        this.$router.replace('/auth').catch(err => { })
       }
     })
   }
