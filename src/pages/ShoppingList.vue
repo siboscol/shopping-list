@@ -9,11 +9,11 @@
           <div class="row q-py-sm full-width text-white">
             <div class="column">
               <div class="text-h5">Total</div>
-              <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
+              <div class="text-subtitle1">{{ itemsCartTotal }} items</div>
             </div>
             <q-space />
             <div class="column">
-              <div class="text-h4">{{ itemsToBuyPrice }}</div>
+              <div class="text-h4">{{ itemsCartPrice }}</div>
               <div class="text-subtitle3 text-right">CHF</div>
             </div>
           </div>
@@ -24,13 +24,13 @@
         <q-scroll-area class="q-scroll-area-items">
           <no-items
             v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
-            message="No products added"
-            @addItem="createItem()"
+            message="No items to buy"
+            @add-item="createItem()"
           />
           <no-items
             v-if="search && !itemsToBuyTotal && !itemsCartTotal"
-            message="No search results."
-            @addItem="createItem(search)"
+            message="No items found."
+            @add-item="createItem(search)"
           />
           <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
           <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />

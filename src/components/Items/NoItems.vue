@@ -5,7 +5,7 @@
     </template>
     {{message}}
     <template v-slot:action>
-      <q-btn flat color="primary" label="Add product" @click="$emit('addItem')" />
+      <q-btn flat color="primary" label="Add item" @click="$emit('add-item')" />
     </template>
   </q-banner>
 </template>

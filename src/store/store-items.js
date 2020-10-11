@@ -137,6 +137,7 @@ const getters = {
     const itemsFiltered = getters.itemsFiltered
     const itemsToBuy = Object.keys(itemsFiltered).reduce((acc, id) => {
       const item = itemsFiltered[id]
+      item.id = id
       if (!item.done) {
         acc.unshift(item)
       }
@@ -146,13 +147,14 @@ const getters = {
   },
   itemsCart: (state, getters) => {
     const itemsFiltered = getters.itemsFiltered
-    const itemsCart = {}
-    Object.keys(itemsFiltered).forEach(id => {
+    const itemsCart = Object.keys(itemsFiltered).reduce((acc, id) => {
       const item = itemsFiltered[id]
+      item.id = id
       if (item.done) {
-        itemsCart[id] = item
+        acc.unshift(item)
       }
-    })
+      return acc
+    }, [])
     return itemsCart
   }
 }
