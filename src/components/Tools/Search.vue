@@ -3,11 +3,14 @@
     outlined
     v-select-all
     v-model="searchField"
-    label="Search"
     dense
+    placeholder="Search"
     bg-color="white"
     @keyup.esc="searchField = ''"
   >
+    <template v-slot:prepend>
+      <q-icon name="search" />
+    </template>
     <template v-slot:append>
       <q-icon
         v-if="searchField !== ''"
@@ -15,7 +18,6 @@
         @click="searchField = ''"
         class="cursor-pointer"
       />
-      <q-icon name="search" />
     </template>
   </q-input>
 </template>

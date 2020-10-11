@@ -31,10 +31,15 @@ export default {
     'price-field': PriceField,
     'quantity-field': QuantityField
   },
+  props: {
+    name : {
+      type: String
+    }
+  },
   data() {
     return {
       editedItem: {
-        name: '',
+        name: this.name || '',
         price: '',
         quantity: 1,
         done: false

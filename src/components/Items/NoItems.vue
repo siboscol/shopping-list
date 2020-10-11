@@ -3,7 +3,7 @@
     <template v-slot:avatar>
       <q-icon name="check" color="primary" />
     </template>
-    No products added
+    {{message}}
     <template v-slot:action>
       <q-btn flat color="primary" label="Add product" @click="$emit('addItem')" />
     </template>
@@ -11,7 +11,15 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: "NoItems",
+  props: {
+    message: {
+      type: String,
+      required: true
+    }
+  }
+}
 </script>
 
 <style>
