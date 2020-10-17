@@ -5,13 +5,21 @@
       <q-card-section class="col q-pb-none" @keyup.enter="onSaveClick">
         <name-field ref="nameField" v-model="editedItem.name" />
         <div class="row">
-          <price-field class="col-6 q-pr-sm" ref="priceField" v-model="editedItem.price" />
-          <quantity-field class="col-6" ref="quantityField" v-model="editedItem.quantity" />
+          <price-field
+            class="col-6 q-pr-sm"
+            ref="priceField"
+            v-model="editedItem.price"
+          />
+          <quantity-field
+            class="col-6"
+            ref="quantityField"
+            v-model="editedItem.quantity"
+          />
         </div>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
-        <q-btn color="primary" push label="Save" @click="onSaveClick" />
+        <q-btn color="primary" :disable="!editedItem.name" push label="Save" @click="onSaveClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -61,13 +69,10 @@ export default {
     },
     onSaveClick() {
       this.$refs.nameField.$refs.name.validate()
-      this.$refs.priceField.$refs.price.validate()
-      this.$refs.quantityField.$refs.quantity.validate()
-      if (
-        !this.$refs.nameField.$refs.name.hasError ||
-        !this.$refs.priceField.$refs.price.hasError ||
-        !this.$refs.quantityField.$refs.quantity.hasError
-      ) {
+      if (!this.$refs.nameField.$refs.name.hasError) {
+        if (this.editedItem.price !== '' && this.editedItem.price !== '0' && !this.editedItem.done) {
+          this.editedItem.done = !this.editedItem.done
+        }
         // on Save, it is REQUIRED to
         // emit "ok" event (with optional payload)
         // before hiding the QDialog

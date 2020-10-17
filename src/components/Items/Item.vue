@@ -53,7 +53,7 @@ export default {
       this.$q
         .dialog({
           component: EditDialog,
-          item: this.item,
+          item: this.item
         })
         .onOk(editedItem => {
           this.updateItem({ id: this.id, updates: editedItem })

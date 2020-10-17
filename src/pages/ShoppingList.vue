@@ -9,11 +9,11 @@
           <div class="row q-py-sm full-width text-white">
             <div class="column">
               <div class="text-h5">Total</div>
-              <div class="text-subtitle1">{{ itemsToBuyTotal }} items</div>
+              <div class="text-subtitle1">{{ itemsCartTotal }} items</div>
             </div>
             <q-space />
             <div class="column">
-              <div class="text-h4">{{ itemsToBuyPrice }}</div>
+              <div class="text-h4">{{ itemsCartPrice }}</div>
               <div class="text-subtitle3 text-right">CHF</div>
             </div>
           </div>
@@ -24,14 +24,14 @@
         <q-scroll-area class="q-scroll-area-items">
           <no-items
             v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
-            @addItem="createItem"
+            message="No items to buy"
+            @add-item="createItem()"
           />
-          <p
+          <no-items
             v-if="search && !itemsToBuyTotal && !itemsCartTotal"
-            class="q-pa-md"
-          >
-            No search results.
-          </p>
+            message="No items found."
+            @add-item="createItem(search)"
+          />
           <items-to-buy v-if="itemsToBuyTotal" :itemsToBuy="itemsToBuy" />
           <items-cart v-if="itemsCartTotal" :itemsCart="itemsCart" />
         </q-scroll-area>
@@ -41,7 +41,7 @@
             color="primary"
             size="lg"
             icon="add"
-            @click="createItem"
+            @click="createItem()"
             class="all-pointer-events"
           />
         </div>
@@ -72,15 +72,19 @@ export default {
     search: Search
   },
   methods: {
-    ...mapActions('items', ['addItem']),
-    createItem() {
+    ...mapActions('items', ['addItem', 'setSearch']),
+    createItem(nameItem) {
       this.$q
         .dialog({
           component: AddDialog,
+          name: nameItem,
           titleDialog: 'Add item'
         })
         .onOk(newItem => {
           this.addItem(newItem)
+          if (nameItem) {
+            this.setSearch('')
+          }
         })
     },
     itemsPriceTotal(items) {
