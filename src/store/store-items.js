@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { uid } from 'quasar'
 import { firebaseDb, firebaseAuth } from 'boot/firebase'
+import { showErrorMessage } from 'src/utils/showErrorMessage'
 
 const state = {
   items: {
@@ -37,6 +38,9 @@ const mutations = {
   addItem(state, payload) {
     Vue.set(state.items, payload.id, payload.item)
   },
+  clearItems(state) {
+    state.items = {}
+  },
   setSearch(state, value) {
     state.search = value
   },
@@ -70,6 +74,11 @@ const actions = {
     // initial check for data
     userItems.once('value', snapshot => {
       commit('setItemsDownloaded', true)
+    },  error => {
+      if (error) {
+        showErrorMessage(error.message)
+        this.$router.replace("/auth")
+      }
     })
 
     // Child Added
@@ -103,17 +112,29 @@ const actions = {
   fbAddItem({}, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
-    itemRef.set(payload.item)
+    itemRef.set(payload.item, error => {
+      if (error) {
+        showErrorMessage(error.message)
+      }
+    })
   },
   fbUpdateItem({}, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
-    itemRef.update(payload.updates)
+    itemRef.update(payload.updates, error => {
+      if (error) {
+        showErrorMessage(error.message)
+      }
+    })
   },
   fbDeleteItem({}, itemId) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
-    itemRef.remove()
+    itemRef.remove(error => {
+      if (error) {
+        showErrorMessage(error.message)
+      }
+    })
   }
 }
 

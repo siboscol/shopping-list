@@ -50,6 +50,7 @@ const actions = {
         this.$router.push('/').catch(err => { })
         dispatch('items/fbReadData', null, { root: true })
       } else {
+        commit('items/clearItems', null, { root: true })
         commit('items/setItemsDownloaded', false, { root: true })
         commit('setLoggedIn', false)
         LocalStorage.set('loggedIn', false)
