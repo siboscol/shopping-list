@@ -1,11 +1,8 @@
 <template>
   <q-page>
-    <div
-      class="absolute full-width full-height column"
-      :class="{ 'bg-white': !itemsDownloaded }"
-    >
+    <div class="column" :class="{ 'bg-white': !itemsDownloaded }">
       <template v-if="itemsDownloaded">
-        <div class="q-px-md">
+        <div id="summaryHeader" class="q-px-md">
           <div class="row q-py-sm full-width text-white">
             <div class="column">
               <div class="text-h5">Total</div>
@@ -21,7 +18,7 @@
             <search />
           </div>
         </div>
-        <q-scroll-area class="q-scroll-area-items">
+        <q-scroll-area :style="calcHeight">
           <no-items
             v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
             message="No items to buy"
@@ -63,6 +60,7 @@ import AddDialog from '../components/Modals/AddDialog'
 import Search from '../components/Tools/Search'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import ItemsToBuyVue from '../components/Items/ItemsToBuy.vue'
+import calcHeight from "src/mixins/calcHeight";
 
 export default {
   components: {
@@ -71,6 +69,7 @@ export default {
     'no-items': NoItems,
     search: Search
   },
+  mixins: [calcHeight],
   methods: {
     ...mapActions('items', ['addItem', 'setSearch']),
     createItem(nameItem) {
@@ -131,9 +130,5 @@ export default {
     text-decoration: line-through;
     color: #bbb;
   }
-}
-.q-scroll-area-items {
-  display: flex;
-  flex-grow: 1;
 }
 </style>
