@@ -1,21 +1,16 @@
 export default {
-  computed: {
-    calcHeight() {
+  watch: {
+    'itemsDownloaded'(newItemsDownload, oldItemsDownload) {
       let offsetHeight = 0
-      if (this.itemsDownloaded) {
-        offsetHeight = document.getElementById('summaryHeader').offsetHeight;
+      if (newItemsDownload) {
+        this.$nextTick(() => {
+          offsetHeight = document.getElementById('summaryHeader').offsetHeight;
+          let style = {
+            height: `calc(100vh - ${offsetHeight}px)`
+          }
+          this.scrollAreaHeight = style
+        })
       }
-      return {
-        height: `calc(100% - ${offsetHeight}px)`
-      }
-      //   Vue.nextTick(() => {
-      //     if (this.itemsDownloaded) {
-      //       const offsetHeight = document.getElementById('summaryHeader').offsetHeight;
-      //       return {
-      //         height: `calc(100% - ${offsetHeight}px)`
-      //       }
-      //     }
-      //  })
     }
   }
 }

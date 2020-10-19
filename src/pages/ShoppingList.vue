@@ -18,7 +18,7 @@
             <search />
           </div>
         </div>
-        <q-scroll-area :style="calcHeight">
+        <q-scroll-area :style="scrollAreaHeight">
           <no-items
             v-if="!itemsToBuyTotal && !search && !settings.showItemsInOneList"
             message="No items to buy"
