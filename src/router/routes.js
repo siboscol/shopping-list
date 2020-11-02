@@ -8,6 +8,14 @@ const routes = [
       { path: '/settings', component: () => import('pages/Settings.vue') }
     ]
   },
+  {
+    path: '/item/:id',
+    component: () => import('layouts/ItemLayout.vue'),
+    children: [
+      { path: 'desc', component: () => import('pages/DescItem.vue') },
+      { path: 'search', component: () => import('pages/SearchItem.vue') },
+    ]
+  },
   { path: '/auth', component: () => import('layouts/Auth.vue') }
 ]
 

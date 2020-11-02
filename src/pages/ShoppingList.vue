@@ -41,7 +41,7 @@
             color="primary"
             size="lg"
             icon="add"
-            @click="createItem()"
+            to="/item/new"
             class="all-pointer-events"
           />
         </div>

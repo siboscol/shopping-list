@@ -1,5 +1,12 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide" position="top">
+  <q-dialog
+    ref="dialog"
+    @hide="onDialogHide"
+    persistent
+    maximized
+    transition-show="slide-up"
+    transition-hide="slide-down"
+  >
     <q-card class="q-dialog-plugin">
       <header-field>Add Item</header-field>
       <q-card-section class="col q-pb-none" @keyup.enter="onSaveClick">
@@ -19,7 +26,13 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
-        <q-btn color="primary" :disable="!editedItem.name" push label="Save" @click="onSaveClick" />
+        <q-btn
+          color="primary"
+          :disable="!editedItem.name"
+          push
+          label="Save"
+          @click="onSaveClick"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -77,7 +90,11 @@ export default {
     onSaveClick() {
       this.$refs.nameField.$refs.name.validate()
       if (!this.$refs.nameField.$refs.name.hasError) {
-        if (this.editedItem.price !== '' && this.editedItem.price !== '0' && !this.editedItem.done) {
+        if (
+          this.editedItem.price !== '' &&
+          this.editedItem.price !== '0' &&
+          !this.editedItem.done
+        ) {
           this.editedItem.done = !this.editedItem.done
         }
         // on Save, it is REQUIRED to
