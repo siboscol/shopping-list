@@ -1,6 +1,7 @@
 <template>
   <q-layout view="hHh Lpr fFf">
-    <q-header elevated>
+    <q-img src="statics/mountains.jpg" class="fixed-top hero-image"></q-img>
+    <q-header class="bg-transparent">
       <q-toolbar>
         <q-btn
           flat
@@ -9,7 +10,7 @@
           icon="arrow_back"
           @click="$router.push('/')"
         />
-        <q-toolbar-title> {{ headerTitle }} Item </q-toolbar-title>
+        <q-toolbar-title> {{ headerTitle }}</q-toolbar-title>
         <q-btn flat to="/" icon-right="done" />
       </q-toolbar>
     </q-header>
@@ -25,7 +26,7 @@ export default {
   name: 'ItemLayout',
   computed: {
     headerTitle() {
-      return !this.$route.params.id ? 'New' : 'Edit'
+      return !this.$route.params.id ? 'Add Items' : 'Edit Item'
     }
   }
 }

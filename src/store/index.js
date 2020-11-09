@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import items from './store-items'
+import itemsList from './store-items-list'
 import settings from './store-settings'
 import auth from './store-auth'
 
@@ -11,6 +12,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       items,
+      itemsList,
       settings,
       auth
     },

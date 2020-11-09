@@ -12,11 +12,11 @@
     </q-item-section>
     <q-item-section @click="$router.push(to)">
       <q-item-label
-        v-html="$options.filters.searchHighlight(item.name, search)"
+        v-html="$options.filters.searchHighlight(editedItem.name, search)"
       />
     </q-item-section>
     <q-item-section side>
-      <q-item-label caption>Qty: {{ item.quantity }}</q-item-label>
+      <q-item-label caption>Qty: {{ editedItem.quantity }}</q-item-label>
     </q-item-section>
     <q-item-section side>
       <div class="text-grey-8 q-gutter-xs">
@@ -26,7 +26,7 @@
           round
           color="red"
           icon="remove"
-          @click.stop="promptToDelete"
+          @click.stop="removeFromList"
         />
       </div>
     </q-item-section>
@@ -34,36 +34,31 @@
 </template>
 
 <script>
-import EditDialog from '../Modals/EditDialog'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   props: ['item', 'id'],
   computed: {
-    ...mapState('items', ['search']),
-    totalPrice() {
-      return parseFloat((this.item.price * this.item.quantity).toFixed(2))
-    },
+    ...mapState('itemsList', ['search']),
     to() {
       return `/item/${this.id}`
     }
   },
+  data() {
+    return {
+      editedItem: {}
+    }
+  },
   methods: {
-    ...mapActions('items', ['updateItem', 'deleteItem']),
-    promptToDelete() {
-      this.$q
-        .dialog({
-          title: 'Confirm',
-          message: 'Do you really want to delete it?',
-          cancel: true,
-          persistent: true
-        })
-        .onOk(() => {
-          this.deleteItem(this.id)
-        })
+    ...mapActions('itemsList', ['updateItem']),
+    removeFromList() {
+      if (this.editedItem.quantity > 0) {
+        this.editedItem.quantity--
+      }
     },
     addToList() {
-      console.log('Item added')
+      this.editedItem.quantity++
+      // this.updateItem({ id: this.id, updates: this.editedItem })
     }
   },
   filters: {
@@ -76,6 +71,9 @@ export default {
       }
       return value
     }
+  },
+  mounted() {
+    this.editedItem = Object.assign({}, this.item)
   }
 }
 </script>
