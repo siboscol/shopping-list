@@ -11,10 +11,12 @@
     clearable
     clear-icon="close"
     prefix="CHF"
-    :rules="[
-            val => (val !== null && val !== '') || 'Please type a price'
-          ]"
-  />
+    :rules="[val => (val !== null && val !== '') || 'Please type a price']"
+  >
+    <template v-slot:before>
+      <q-icon name="local_offer" />
+    </template>
+  </q-input>
 </template>
 
 <script>
@@ -34,5 +36,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

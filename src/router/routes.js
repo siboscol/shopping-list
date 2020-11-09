@@ -9,11 +9,11 @@ const routes = [
     ]
   },
   {
-    path: '/item/:id',
+    path: '/item',
     component: () => import('layouts/ItemLayout.vue'),
     children: [
-      { path: 'desc', component: () => import('pages/DescItem.vue') },
-      { path: 'search', component: () => import('pages/SearchItem.vue') },
+      { path: '', component: () => import('pages/AddItems.vue') },
+      { path: ':id', component: () => import('pages/EditItem.vue') },
     ]
   },
   { path: '/auth', component: () => import('layouts/Auth.vue') }

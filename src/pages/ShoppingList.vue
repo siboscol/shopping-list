@@ -41,7 +41,7 @@
             color="primary"
             size="lg"
             icon="add"
-            to="/item/new"
+            to="/item"
             class="all-pointer-events"
           />
         </div>

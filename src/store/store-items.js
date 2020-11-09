@@ -177,6 +177,9 @@ const getters = {
       return acc
     }, [])
     return itemsCart
+  },
+  getItemById: (state) => (id) => {
+    return state.items[id]
   }
 }
 
