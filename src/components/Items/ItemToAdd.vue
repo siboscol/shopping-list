@@ -65,7 +65,7 @@ export default {
     searchHighlight(value, search) {
       if (search) {
         const searchRegExp = RegExp(search, 'ig')
-        return value.replace(searchRegExp, match => {
+        return value && value.replace(searchRegExp, match => {
           return '<span class="bg-yellow-6">' + match + '</span>'
         })
       }

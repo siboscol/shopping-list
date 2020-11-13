@@ -6,7 +6,7 @@
     dense
     placeholder="Search"
     bg-color="white"
-    debounce="250"
+    debounce="500"
     @keyup.esc="searchField = ''"
   >
     <template v-slot:prepend>
