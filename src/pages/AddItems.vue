@@ -6,7 +6,12 @@
       </div>
     </q-toolbar>
     <template v-if="itemsDownloaded">
-      <q-list class="bg-white" separator bordered :style="scrollAreaHeight">
+      <q-list
+        class="bg-white scroll"
+        separator
+        bordered
+        :style="scrollAreaHeight"
+      >
         <Item
           v-for="(item, key) in itemsFiltered"
           :key="key"

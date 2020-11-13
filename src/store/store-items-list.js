@@ -4,26 +4,7 @@ import { firebaseDb, firebaseAuth } from 'boot/firebase'
 import { showErrorMessage } from 'src/utils/showErrorMessage'
 
 const state = {
-  items: {
-    'id1': {
-      name: 'pippo',
-      done: false,
-      price: 0,
-      quantity: 1
-    },
-    'id2': {
-      name: 'pluto',
-      done: false,
-      price: 2,
-      quantity: 3
-    },
-    'id3': {
-      name: 'paperino',
-      done: false,
-      price: 0,
-      quantity: 1
-    },
-  },
+  items: {},
   search: '',
   itemsDownloaded: true
 }
@@ -69,10 +50,10 @@ const actions = {
   },
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
-    const userItems = firebaseDb.ref('items/' + userId)
+    const itemsList = firebaseDb.ref('itemsList/')
 
     // initial check for data
-    userItems.once('value', snapshot => {
+    itemsList.once('value', snapshot => {
       commit('setItemsDownloaded', true)
     },  error => {
       if (error) {
@@ -82,7 +63,7 @@ const actions = {
     })
 
     // Child Added
-    userItems.on('child_added', snapshot => {
+    itemsList.on('child_added', snapshot => {
       const item = snapshot.val()
 
       const payload = {
@@ -93,7 +74,7 @@ const actions = {
     })
 
     // Child Changed
-    userItems.on('child_changed', snapshot => {
+    itemsList.on('child_changed', snapshot => {
       const item = snapshot.val()
 
       const payload = {
@@ -104,7 +85,7 @@ const actions = {
     })
 
     // Child Removed
-    userItems.on('child_removed', snapshot => {
+    itemsList.on('child_removed', snapshot => {
       const itemId = snapshot.key
       commit('deleteItem', itemId)
     })
