@@ -57,7 +57,7 @@ const actions = {
     dispatch('fbDeleteItem', id)
   },
   addItem({ dispatch }, item) {
-    const itemId = uid()
+    const itemId = item.id || uid()
     const payload = {
       id: itemId,
       item: item

@@ -11,7 +11,7 @@
           @click="$router.push('/')"
         />
         <q-toolbar-title> {{ headerTitle }}</q-toolbar-title>
-        <q-btn flat to="/" icon-right="done" />
+        <q-btn v-if="$route.params.id" flat to="/" icon-right="done" />
       </q-toolbar>
     </q-header>
 

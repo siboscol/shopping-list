@@ -6,7 +6,7 @@ import { showErrorMessage } from 'src/utils/showErrorMessage'
 const state = {
   items: {},
   search: '',
-  itemsDownloaded: true
+  itemsDownloaded: false
 }
 
 const mutations = {
@@ -53,14 +53,18 @@ const actions = {
     const itemsList = firebaseDb.ref('itemsList/')
 
     // initial check for data
-    itemsList.once('value', snapshot => {
-      commit('setItemsDownloaded', true)
-    },  error => {
-      if (error) {
-        showErrorMessage(error.message)
-        this.$router.replace("/auth")
+    itemsList.once(
+      'value',
+      snapshot => {
+        commit('setItemsDownloaded', true)
+      },
+      error => {
+        if (error) {
+          showErrorMessage(error.message)
+          this.$router.replace('/auth')
+        }
       }
-    })
+    )
 
     // Child Added
     itemsList.on('child_added', snapshot => {
@@ -120,11 +124,12 @@ const actions = {
 }
 
 const getters = {
-  itemsFiltered: state => {
+  itemsFiltered: (state, getters) => {
+    const itemsToAdd = getters.itemsToAdd
     const itemsFiltered = {}
     if (state.search) {
-      Object.keys(state.items).forEach(id => {
-        const item = state.items[id],
+      Object.keys(itemsToAdd).forEach(id => {
+        const item = itemsToAdd[id],
           itemNameLowerCase = item.name.toLowerCase(),
           searchLowerCase = state.search.toLowerCase()
         if (itemNameLowerCase.includes(searchLowerCase)) {
@@ -133,34 +138,34 @@ const getters = {
       })
       return itemsFiltered
     }
-    return state.items
+    return itemsToAdd
   },
-  itemsToBuy: (state, getters) => {
-    const itemsFiltered = getters.itemsFiltered
-    const itemsToBuy = Object.keys(itemsFiltered).reduce((acc, id) => {
-      const item = itemsFiltered[id]
-      item.id = id
-      if (!item.done) {
-        acc.unshift(item)
+  itemsToAdd: (state, getters, rootState) => {
+    const itemsFromCurrentList = rootState.items.items
+    
+    const totalItems = {}
+    Object.keys(state.items).forEach(id => {
+      if (!itemsFromCurrentList[id]) {
+        const item = state.items[id]
+        const defaultItem = {
+          name: item.name,
+          done: false,
+          price: 0,
+          quantity: 0,
+          id
+        }
+        totalItems[id] = defaultItem
       }
-      return acc
-    }, [])
-    return itemsToBuy
+    })
+
+    return { ...itemsFromCurrentList, ...totalItems }
   },
-  itemsCart: (state, getters) => {
-    const itemsFiltered = getters.itemsFiltered
-    const itemsCart = Object.keys(itemsFiltered).reduce((acc, id) => {
-      const item = itemsFiltered[id]
-      item.id = id
-      if (item.done) {
-        acc.unshift(item)
-      }
-      return acc
-    }, [])
-    return itemsCart
-  },
-  getItemById: (state) => (id) => {
+  getItemById: state => id => {
     return state.items[id]
+  },
+  itemsFilteredTotal: (state, getters) => {
+    const itemsFiltered = getters.itemsFiltered
+    return Object.keys(itemsFiltered).length
   }
 }
 

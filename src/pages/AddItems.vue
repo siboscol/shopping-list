@@ -7,6 +7,7 @@
     </q-toolbar>
     <template v-if="itemsDownloaded">
       <q-list
+        v-if="itemsFilteredTotal"
         class="bg-white scroll"
         separator
         bordered
@@ -19,6 +20,11 @@
           :id="item.id"
         />
       </q-list>
+      <NoItems
+        v-if="search && !itemsFilteredTotal"
+        message="No items found."
+        @add-item="createItem(search)"
+      />
     </template>
     <template v-else>
       <span class="absolute-center">
@@ -31,11 +37,12 @@
 <script>
 import Search from '../components/Tools/SearchToAdd'
 import Item from '../components/Items/ItemToAdd'
-import { mapGetters, mapState } from 'vuex'
+import NoItems from '../components/Items/NoItems'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
   name: 'AddItems',
-  components: { Search, Item },
+  components: { Search, Item, NoItems },
   data() {
     return {
       scrollAreaHeight: {}
@@ -44,8 +51,15 @@ export default {
   computed: {
     ...mapState('itemsList', ['search', 'itemsDownloaded']),
     ...mapGetters('itemsList', {
-      itemsFiltered: 'itemsFiltered'
+      itemsFiltered: 'itemsFiltered',
+      itemsFilteredTotal: 'itemsFilteredTotal'
     })
+  },
+  methods: {
+    ...mapActions('itemsList', ['setSearch']),
+    createItem(nameItem) {
+      console.log('Item to create', nameItem)
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -57,6 +71,7 @@ export default {
       }
       this.scrollAreaHeight = style
     })
+    this.setSearch('')
   }
 }
 </script>
