@@ -62,7 +62,6 @@ import NoItems from '../components/Items/NoItems'
 import AddDialog from '../components/Modals/AddDialog'
 import Search from '../components/Tools/Search'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import ItemsToBuyVue from '../components/Items/ItemsToBuy.vue'
 
 export default {
   components: {
@@ -74,18 +73,19 @@ export default {
   methods: {
     ...mapActions('items', ['addItem', 'setSearch']),
     createItem(nameItem) {
-      this.$q
-        .dialog({
-          component: AddDialog,
-          name: nameItem,
-          titleDialog: 'Add item'
-        })
-        .onOk(newItem => {
-          this.addItem(newItem)
-          if (nameItem) {
-            this.setSearch('')
-          }
-        })
+      this.$router.push(`/new/${nameItem}`)
+      // this.$q
+      //   .dialog({
+      //     component: AddDialog,
+      //     name: nameItem,
+      //     titleDialog: 'Add item'
+      //   })
+      //   .onOk(newItem => {
+      //     this.addItem(newItem)
+      //     if (nameItem) {
+      //       this.setSearch('')
+      //     }
+      //   })
     },
     itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)

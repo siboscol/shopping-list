@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import Search from '../components/Tools/SearchToAdd'
-import Item from '../components/Items/ItemToAdd'
-import NoItems from '../components/Items/NoItems'
+import Search from '../../components/Tools/SearchToAdd'
+import Item from '../../components/Items/ItemToAdd'
+import NoItems from '../../components/Items/NoItems'
 import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
@@ -57,8 +57,9 @@ export default {
   },
   methods: {
     ...mapActions('itemsList', ['setSearch']),
-    createItem(nameItem) {
-      console.log('Item to create', nameItem)
+    createItem(newItem) {
+      console.log('Item to create', newItem)
+      this.$router.push(`/new/${newItem}`)
     }
   },
   mounted() {

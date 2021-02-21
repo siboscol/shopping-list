@@ -11,12 +11,12 @@
           @click="$router.push('/')"
         />
         <q-toolbar-title> {{ headerTitle }}</q-toolbar-title>
-        <q-btn v-if="$route.params.id" flat to="/" icon-right="done" />
+        <q-btn v-if="$route.params.id" flat @click.stop="saveItem" to="/" icon-right="done" />
       </q-toolbar>
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <router-view ref="item" />
     </q-page-container>
   </q-layout>
 </template>
@@ -26,7 +26,16 @@ export default {
   name: 'ItemLayout',
   computed: {
     headerTitle() {
-      return !this.$route.params.id ? 'Add Items' : 'Edit Item'
+      let title = this.$route.name === 'addItems' ? 'Add Items' : ''
+      title = this.$route.name === 'editItem' ? 'Edit Item' : title
+      title = this.$route.name === 'newItem' ? 'New Item' : title
+      return title
+    }
+  },
+  methods: {
+    saveItem() {
+      this.$refs.item.save()
+      this.$router.push('/')
     }
   }
 }

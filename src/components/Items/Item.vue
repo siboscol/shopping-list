@@ -1,5 +1,5 @@
 <template>
-  <q-item v-ripple clickable :to="to" @click.stop="editItem" :class="{ 'done bg-blue-1': item.done }">
+  <q-item v-ripple clickable :to="to" :class="{ 'done bg-blue-1': item.done }">
     <q-item-section avatar>
       <q-checkbox
         @input="updateItem({id: id, updates: { done: !item.done}})"
@@ -16,7 +16,7 @@
     </q-item-section>
     <q-item-section side>
       <div class="text-grey-8 q-gutter-xs">
-        <q-btn flat dense round color="primary" icon="edit" @click.stop="editItem" />
+        <q-btn flat dense round color="primary" icon="edit" :to="to" />
         <q-btn flat dense round color="red" icon="delete" @click.stop="promptToDelete" />
       </div>
     </q-item-section>
@@ -52,16 +52,16 @@ export default {
           this.deleteItem(this.id)
         })
     },
-    editItem() {
-      this.$q
-        .dialog({
-          component: EditDialog,
-          item: this.item
-        })
-        .onOk(editedItem => {
-          this.updateItem({ id: this.id, updates: editedItem })
-        })
-    }
+    // editItem() {
+    //   this.$q
+    //     .dialog({
+    //       component: EditDialog,
+    //       item: this.item
+    //     })
+    //     .onOk(editedItem => {
+    //       this.updateItem({ id: this.id, updates: editedItem })
+    //     })
+    // }
   },
   filters: {
     searchHighlight(value, search) {
