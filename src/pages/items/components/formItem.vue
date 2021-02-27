@@ -15,7 +15,7 @@
 <script>
 import NameField from 'src/components/Modals/components/NameField'
 import PriceField from 'src/components/Modals/components/PriceField'
-import QuantityField from 'src/components/Modals/components/QuantityField'
+import QuantityFIeld from 'src/components/Modals/components/QuantityFIeld'
 
 export default {
   name: 'FormItem',
@@ -23,7 +23,7 @@ export default {
   components: {
     'name-field': NameField,
     'price-field': PriceField,
-    'quantity-field': QuantityField
+    'quantity-field': QuantityFIeld
   },
   methods: {
     isValidForm() {
