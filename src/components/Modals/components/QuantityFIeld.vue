@@ -8,10 +8,13 @@
     outlined
     class="q-pt-sm"
     :rules="[
-            val => (val !== null && val !== '') || 'Please type a quantity',
-            val => val > 0 || 'Please quantity can not be 0.'
-          ]"
+      val => (val !== null && val !== '') || 'Please type a quantity',
+      val => val > 0 || 'Please quantity can not be 0.'
+    ]"
   >
+    <template v-slot:before>
+      <q-icon name="mdi-weight" />
+    </template>
     <template v-slot:append>
       <q-btn
         round
@@ -32,5 +35,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

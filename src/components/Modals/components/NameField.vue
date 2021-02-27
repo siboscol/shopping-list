@@ -13,7 +13,11 @@
     :rules="[
       val => (val !== null && val !== '') || 'Please type a name for the item'
     ]"
-  />
+  >
+    <template v-slot:before>
+      <q-icon name="label" />
+    </template>
+  </q-input>
 </template>
 
 <script>

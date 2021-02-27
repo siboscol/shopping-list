@@ -12,8 +12,6 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
         <q-toolbar-title>My Shopping list</q-toolbar-title>
-        <q-btn flat to="/auth" v-if="!loggedIn" dense icon-right="account_circle" label="Login" />
-        <q-btn flat v-else icon-right="account_circle" label="Logout" dense @click="logoutUser" />
       </q-toolbar>
     </q-header>
 
@@ -42,6 +40,18 @@
             </q-item-section>
 
             <q-item-section>Settings</q-item-section>
+          </q-item>
+          <q-item v-if="!loggedIn" to="auth" exact clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="account_circle" />
+            </q-item-section>
+            <q-item-section>Login</q-item-section>
+          </q-item>
+          <q-item v-else @click="logoutUser" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="account_circle" />
+            </q-item-section>
+            <q-item-section>Logout</q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
@@ -90,6 +100,6 @@ export default {
 
 <style lang="scss">
 .hero-image {
-  height: 184px;
+  height: 197px;
 }
 </style>

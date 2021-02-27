@@ -8,6 +8,15 @@ const routes = [
       { path: '/settings', component: () => import('pages/Settings.vue') }
     ]
   },
+  {
+    path: '/item',
+    component: () => import('layouts/ItemLayout.vue'),
+    children: [
+      { path: '/addItems', name: 'addItems', component: () => import('pages/items/AddItems.vue') },
+      { path: ':id', name: 'editItem', component: () => import('pages/items/EditItem.vue') },
+      { path: '/new/:id', name: 'newItem', component: () => import('pages/items/AddItem.vue') }
+    ]
+  },
   { path: '/auth', component: () => import('layouts/Auth.vue') }
 ]
 

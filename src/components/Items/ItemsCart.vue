@@ -10,7 +10,7 @@
 <script>
 import Item from './Item'
 import ListHeader from '../Shared/ListHeader'
-import { mapGetters } from "vuex";
+import { mapGetters } from "vuex"
 
 export default {
   props: ['itemsCart'],

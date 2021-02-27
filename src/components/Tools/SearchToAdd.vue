@@ -33,7 +33,7 @@ export default {
     selectAll
   },
   computed: {
-    ...mapState('items', ['search']),
+    ...mapState('itemsList', ['search']),
     searchField: {
       get() {
         return this.search
@@ -44,9 +44,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('items', ['setSearch'])
+    ...mapActions('itemsList', ['setSearch'])
   }
 }
 </script>
-
-<style></style>

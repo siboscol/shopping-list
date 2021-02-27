@@ -1,7 +1,7 @@
 <template>
   <q-input
     ref="price"
-    v-model.number="price"
+    v-model.number="value"
     v-select-all
     @input="$emit('input', $event)"
     type="number"
@@ -11,10 +11,12 @@
     clearable
     clear-icon="close"
     prefix="CHF"
-    :rules="[
-            val => (val !== null && val !== '') || 'Please type a price'
-          ]"
-  />
+    :rules="[val => (val !== null && val !== '') || 'Please type a price']"
+  >
+    <template v-slot:before>
+      <q-icon name="local_offer" />
+    </template>
+  </q-input>
 </template>
 
 <script>
@@ -23,16 +25,10 @@ import { selectAll } from 'src/directives/select-all'
 export default {
   name: 'PriceField',
   props: ['value'],
-  data() {
-    return {
-      price: this.value
-    }
-  },
   directives: {
     selectAll
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
