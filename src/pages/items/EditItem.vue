@@ -1,17 +1,17 @@
 <template>
   <q-page>
-    <form-item :item="item" />
+    <form-item ref="formItem" :item="item" />
   </q-page>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import formItem from './components/formItem'
+import FormItem from './components/FormItem'
 
 export default {
   name: 'EditItem',
   components: {
-    'form-item': formItem
+    'form-item': FormItem
   },
   data() {
     return {
@@ -19,13 +19,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('items', ['getItemById']),
+    ...mapGetters('items', ['getItemById'])
   },
   methods: {
     ...mapActions('items', ['updateItem']),
     save() {
-      // TODO Here should go some validation
-      this.updateItem({ id: this.$route.params.id, updates: this.item })
+      if (this.$refs.formItem.isValidForm()) {
+        this.updateItem({ id: this.$route.params.id, updates: this.item })
+      }
     }
   },
   mounted() {

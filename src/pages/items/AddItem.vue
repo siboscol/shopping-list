@@ -1,17 +1,17 @@
 <template>
   <q-page>
-    <form-item :item="newItem"/>
+    <form-item ref="formItem" :item="newItem" />
   </q-page>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import formItem from './components/formItem'
+import FormItem from './components/FormItem'
 
 export default {
   name: 'AddItem',
   components: {
-    'form-item': formItem
+    'form-item': FormItem
   },
   data() {
     return {
@@ -26,8 +26,9 @@ export default {
   methods: {
     ...mapActions('items', ['addItem']),
     save() {
-      // TODO Here should go some validation
-      this.addItem(this.newItem)
+      if (this.$refs.formItem.isValidForm()) {
+        this.addItem(this.newItem)
+      }
     }
   }
 }

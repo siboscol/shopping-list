@@ -58,7 +58,6 @@ export default {
   methods: {
     ...mapActions('itemsList', ['setSearch']),
     createItem(newItem) {
-      console.log('Item to create', newItem)
       this.$router.push(`/new/${newItem}`)
     }
   },

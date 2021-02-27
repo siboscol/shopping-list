@@ -51,17 +51,7 @@ export default {
         .onOk(() => {
           this.deleteItem(this.id)
         })
-    },
-    // editItem() {
-    //   this.$q
-    //     .dialog({
-    //       component: EditDialog,
-    //       item: this.item
-    //     })
-    //     .onOk(editedItem => {
-    //       this.updateItem({ id: this.id, updates: editedItem })
-    //     })
-    // }
+    }
   },
   filters: {
     searchHighlight(value, search) {

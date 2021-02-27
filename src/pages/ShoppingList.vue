@@ -41,7 +41,7 @@
             color="primary"
             size="lg"
             icon="add"
-            to="/item"
+            to="/addItems"
             class="all-pointer-events"
           />
         </div>
@@ -74,18 +74,6 @@ export default {
     ...mapActions('items', ['addItem', 'setSearch']),
     createItem(nameItem) {
       this.$router.push(`/new/${nameItem}`)
-      // this.$q
-      //   .dialog({
-      //     component: AddDialog,
-      //     name: nameItem,
-      //     titleDialog: 'Add item'
-      //   })
-      //   .onOk(newItem => {
-      //     this.addItem(newItem)
-      //     if (nameItem) {
-      //       this.setSearch('')
-      //     }
-      //   })
     },
     itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)
