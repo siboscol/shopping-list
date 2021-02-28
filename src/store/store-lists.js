@@ -4,29 +4,25 @@ import { firebaseDb, firebaseAuth } from 'boot/firebase'
 import { showErrorMessage } from 'src/utils/showErrorMessage'
 
 const state = {
-  items: {},
-  search: '',
-  itemsDownloaded: false
+  lists: {},
+  listsDownloaded: false
 }
 
 const mutations = {
   updateItem(state, payload) {
-    Object.assign(state.items[payload.id], payload.updates)
+    Object.assign(state.lists[payload.id], payload.updates)
   },
   deleteItem(state, id) {
-    Vue.delete(state.items, id)
+    Vue.delete(state.lists, id)
   },
   addItem(state, payload) {
-    Vue.set(state.items, payload.id, payload.item)
+    Vue.set(state.lists, payload.id, payload.item)
   },
-  clearItems(state) {
-    state.items = {}
+  clearlists(state) {
+    state.lists = {}
   },
-  setSearch(state, value) {
-    state.search = value
-  },
-  setItemsDownloaded(state, value) {
-    state.itemsDownloaded = value
+  setlistsDownloaded(state, value) {
+    state.listsDownloaded = value
   }
 }
 
@@ -37,26 +33,26 @@ const actions = {
   deleteItem({ dispatch }, id) {
     dispatch('fbDeleteItem', id)
   },
-  addItem({ dispatch }, item) {
-    const itemId = uid()
+  addList({ dispatch }, list) {
+    const listId = uid()
     const payload = {
-      id: itemId,
-      item: item
+      id: listId,
+      list: list
     }
-    dispatch('fbAddItem', payload)
+    dispatch('fbAddList', payload)
   },
   setSearch({ commit }, value) {
     commit('setSearch', value)
   },
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
-    const itemsList = firebaseDb.ref('itemsList/')
+    const listsList = firebaseDb.ref('items/' + userId + '/')
 
     // initial check for data
-    itemsList.once(
+    listsList.once(
       'value',
       snapshot => {
-        commit('setItemsDownloaded', true)
+        commit('setlistsDownloaded', true)
       },
       error => {
         if (error) {
@@ -67,7 +63,7 @@ const actions = {
     )
 
     // Child Added
-    itemsList.on('child_added', snapshot => {
+    listsList.on('child_added', snapshot => {
       const item = snapshot.val()
 
       const payload = {
@@ -78,7 +74,7 @@ const actions = {
     })
 
     // Child Changed
-    itemsList.on('child_changed', snapshot => {
+    listsList.on('child_changed', snapshot => {
       const item = snapshot.val()
 
       const payload = {
@@ -89,15 +85,15 @@ const actions = {
     })
 
     // Child Removed
-    itemsList.on('child_removed', snapshot => {
+    listsList.on('child_removed', snapshot => {
       const itemId = snapshot.key
       commit('deleteItem', itemId)
     })
   },
-  fbAddItem({}, payload) {
+  fbAddList({}, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
-    itemRef.set(payload.item, error => {
+    itemRef.set(payload.list, error => {
       if (error) {
         showErrorMessage(error.message)
       }
@@ -124,29 +120,29 @@ const actions = {
 }
 
 const getters = {
-  itemsFiltered: (state, getters) => {
-    const itemsToAdd = getters.itemsToAdd
-    const itemsFiltered = {}
+  listsFiltered: (state, getters) => {
+    const listsToAdd = getters.listsToAdd
+    const listsFiltered = {}
     if (state.search) {
-      Object.keys(itemsToAdd).forEach(id => {
-        const item = itemsToAdd[id],
+      Object.keys(listsToAdd).forEach(id => {
+        const item = listsToAdd[id],
           itemNameLowerCase = item.name.toLowerCase(),
           searchLowerCase = state.search.toLowerCase()
         if (itemNameLowerCase.includes(searchLowerCase)) {
-          itemsFiltered[id] = item
+          listsFiltered[id] = item
         }
       })
-      return itemsFiltered
+      return listsFiltered
     }
-    return itemsToAdd
+    return listsToAdd
   },
-  itemsToAdd: (state, getters, rootState) => {
-    const itemsFromCurrentList = rootState.items.items
+  listsToAdd: (state, getters, rootState) => {
+    const listsFromCurrentList = rootState.lists.lists
     
-    const totalItems = {}
-    Object.keys(state.items).forEach(id => {
-      if (!itemsFromCurrentList[id]) {
-        const item = state.items[id]
+    const totallists = {}
+    Object.keys(state.lists).forEach(id => {
+      if (!listsFromCurrentList[id]) {
+        const item = state.lists[id]
         const defaultItem = {
           name: item.name,
           done: false,
@@ -154,18 +150,18 @@ const getters = {
           quantity: 0,
           id
         }
-        totalItems[id] = defaultItem
+        totallists[id] = defaultItem
       }
     })
 
-    return { ...itemsFromCurrentList, ...totalItems }
+    return { ...listsFromCurrentList, ...totallists }
   },
   getItemById: state => id => {
-    return state.items[id]
+    return state.lists[id]
   },
-  itemsFilteredTotal: (state, getters) => {
-    const itemsFiltered = getters.itemsFiltered
-    return Object.keys(itemsFiltered).length
+  listsFilteredTotal: (state, getters) => {
+    const listsFiltered = getters.listsFiltered
+    return Object.keys(listsFiltered).length
   }
 }
 

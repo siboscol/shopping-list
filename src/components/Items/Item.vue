@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import EditDialog from '../Modals/EditDialog'
 import { mapActions, mapState } from 'vuex'
 
 export default {
