@@ -1,6 +1,6 @@
 <template>
   <q-item v-ripple clickable>
-    <q-item-section>
+    <q-item-section @click="loadList()">
       <q-input
         :autofocus="!isEdit"
         :value="list.name"
@@ -42,7 +42,7 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  props: ['list', 'id'],
+  props: ['list'],
   data() {
     return {
       isEdit: false
@@ -54,11 +54,12 @@ export default {
       return parseFloat((this.list.price * this.list.quantity).toFixed(2))
     },
     to() {
-      return `/item/${this.id}`
+      return `/list/${this.list.id}`
     }
   },
   methods: {
-    ...mapActions('items', ['updateItem', 'deleteItem']),
+    ...mapActions('lists', ['deleteItem']),
+    ...mapActions('items', ['fbReadData']),
     promptToDelete() {
       this.$q
         .dialog({
@@ -68,8 +69,12 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          this.deleteItem(this.id)
+          this.deleteItem(this.list.id)
         })
+    },
+    loadList() {
+       this.fbReadData(this.list.id)
+      this.$router.push(this.to)
     }
   }
 }

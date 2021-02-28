@@ -90,7 +90,7 @@ const actions = {
       commit('deleteItem', itemId)
     })
   },
-  fbAddList({}, payload) {
+  fbAddList({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
     itemRef.set(payload.list, error => {
@@ -99,7 +99,7 @@ const actions = {
       }
     })
   },
-  fbUpdateItem({}, payload) {
+  fbUpdateItem({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
     itemRef.update(payload.updates, error => {
@@ -108,7 +108,7 @@ const actions = {
       }
     })
   },
-  fbDeleteItem({}, itemId) {
+  fbDeleteItem({ }, itemId) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
     itemRef.remove(error => {
@@ -120,48 +120,21 @@ const actions = {
 }
 
 const getters = {
-  listsFiltered: (state, getters) => {
-    const listsToAdd = getters.listsToAdd
-    const listsFiltered = {}
-    if (state.search) {
-      Object.keys(listsToAdd).forEach(id => {
-        const item = listsToAdd[id],
-          itemNameLowerCase = item.name.toLowerCase(),
-          searchLowerCase = state.search.toLowerCase()
-        if (itemNameLowerCase.includes(searchLowerCase)) {
-          listsFiltered[id] = item
-        }
-      })
-      return listsFiltered
-    }
-    return listsToAdd
+  listOfLists: (state) => {
+    const listOfLists = Object.keys(state.lists).reduce((acc, id) => {
+      const list = state.lists[id]
+      list.id = id
+      acc.unshift(list)
+      return acc
+    }, [])
+    return listOfLists
   },
-  listsToAdd: (state, getters, rootState) => {
-    const listsFromCurrentList = rootState.lists.lists
-    
-    const totallists = {}
-    Object.keys(state.lists).forEach(id => {
-      if (!listsFromCurrentList[id]) {
-        const item = state.lists[id]
-        const defaultItem = {
-          name: item.name,
-          done: false,
-          price: 0,
-          quantity: 0,
-          id
-        }
-        totallists[id] = defaultItem
-      }
-    })
-
-    return { ...listsFromCurrentList, ...totallists }
-  },
-  getItemById: state => id => {
+  getListById: state => id => {
     return state.lists[id]
   },
-  listsFilteredTotal: (state, getters) => {
-    const listsFiltered = getters.listsFiltered
-    return Object.keys(listsFiltered).length
+  listsTotal: (state, getters) => {
+    const listOfLists = getters.listOfLists
+    return Object.keys(listOfLists).length
   }
 }
 

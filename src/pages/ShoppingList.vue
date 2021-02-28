@@ -71,7 +71,7 @@ export default {
     search: Search
   },
   methods: {
-    ...mapActions('items', ['addItem', 'setSearch']),
+    ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
     createItem(nameItem) {
       this.$router.push(`/new/${nameItem}`)
     },

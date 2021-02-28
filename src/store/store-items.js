@@ -69,7 +69,7 @@ const actions = {
   },
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
-    const userItems = firebaseDb.ref('items/' + userId)
+    const userItems = firebaseDb.ref('items/' + userId + '/' + value + '/items')
 
     // initial check for data
     userItems.once('value', snapshot => {
