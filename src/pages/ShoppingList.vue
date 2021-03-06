@@ -41,7 +41,7 @@
             color="primary"
             size="lg"
             icon="add"
-            to="/addItems"
+            :to="`${$route.params.id}/addItems`"
             class="all-pointer-events"
           />
         </div>
@@ -59,7 +59,6 @@
 import ItemsToBuy from '../components/Items/ItemsToBuy'
 import ItemsCart from '../components/Items/ItemsCart'
 import NoItems from '../components/Items/NoItems'
-import AddDialog from '../components/Modals/AddDialog'
 import Search from '../components/Tools/Search'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
@@ -73,7 +72,7 @@ export default {
   methods: {
     ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
     createItem(nameItem) {
-      this.$router.push(`/new/${nameItem}`)
+      this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
     },
     itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)

@@ -4,18 +4,18 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/ShoppingLists.vue') },
-      { path: '/list/:id', component: () => import('pages/ShoppingList.vue') },
-      { path: '/help', component: () => import('pages/Help.vue') },
-      { path: '/settings', component: () => import('pages/Settings.vue') }
+      { path: 'list/:id', component: () => import('pages/ShoppingList.vue') },
+      { path: 'help', component: () => import('pages/Help.vue') },
+      { path: 'settings', component: () => import('pages/Settings.vue') }
     ]
   },
   {
-    path: '/item',
+    path: '/list/:list',
     component: () => import('layouts/ItemLayout.vue'),
     children: [
-      { path: '/addItems', name: 'addItems', component: () => import('pages/items/AddItems.vue') },
-      { path: ':id', name: 'editItem', component: () => import('pages/items/EditItem.vue') },
-      { path: '/new/:id', name: 'newItem', component: () => import('pages/items/AddItem.vue') }
+      { path: 'addItems', name: 'addItems', component: () => import('pages/items/AddItems.vue') },
+      { path: 'item/edit/:id', name: 'editItem', component: () => import('pages/items/EditItem.vue') },
+      { path: 'item/new/:id?', name: 'newItem', component: () => import('src/pages/items/NewItem.vue') }
     ]
   },
   { path: '/auth', component: () => import('layouts/Auth.vue') }

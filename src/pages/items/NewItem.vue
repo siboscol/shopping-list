@@ -9,7 +9,7 @@ import { mapActions } from 'vuex'
 import FormItem from './components/FormItem'
 
 export default {
-  name: 'AddItem',
+  name: 'NewItem',
   components: {
     'form-item': FormItem
   },

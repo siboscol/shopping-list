@@ -34,7 +34,7 @@ export default {
       return parseFloat((this.item.price * this.item.quantity).toFixed(2))
     },
     to() {
-      return `/item/${this.id}`
+      return `/item/edit/${this.id}`
     }
   },
   methods: {
