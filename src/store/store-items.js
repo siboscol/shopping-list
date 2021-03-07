@@ -25,7 +25,8 @@ const state = {
     // },
   },
   search: '',
-  itemsDownloaded: false
+  itemsDownloaded: false,
+  listName: ''
 }
 
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
   },
   setItemsDownloaded(state, value) {
     state.itemsDownloaded = value
+  },
+  setListName(state, value) {
+    state.listName = value
   }
 }
 
@@ -53,13 +57,14 @@ const actions = {
   updateItem({ dispatch }, payload) {
     dispatch('fbUpdateItem', payload)
   },
-  deleteItem({ dispatch }, id) {
-    dispatch('fbDeleteItem', id)
+  deleteItem({ dispatch }, payload) {
+    dispatch('fbDeleteItem', payload)
   },
-  addItem({ dispatch }, item) {
+  addItem({ dispatch }, { list, item }) {
     const itemId = item.id || uid()
     const payload = {
       id: itemId,
+      list,
       item: item
     }
     dispatch('fbAddItem', payload)
@@ -67,14 +72,16 @@ const actions = {
   setSearch({ commit }, value) {
     commit('setSearch', value)
   },
-  fbReadData({ commit }, value) {
+  fbReadData({ commit, dispatch }, value) {
+    commit('clearItems')
     const userId = firebaseAuth.currentUser.uid
     const userItems = firebaseDb.ref('items/' + userId + '/' + value + '/items')
 
     // initial check for data
     userItems.once('value', snapshot => {
       commit('setItemsDownloaded', true)
-    },  error => {
+      dispatch('fbReadListName', value)
+    }, error => {
       if (error) {
         showErrorMessage(error.message)
         this.$router.replace("/auth")
@@ -109,30 +116,43 @@ const actions = {
       commit('deleteItem', itemId)
     })
   },
-  fbAddItem({}, payload) {
+  fbAddItem({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.list + '/items/' + payload.id)
     itemRef.set(payload.item, error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
   },
-  fbUpdateItem({}, payload) {
+  fbUpdateItem({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.list + '/items/' + payload.id)
     itemRef.update(payload.updates, error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
   },
-  fbDeleteItem({}, itemId) {
+  fbDeleteItem({ }, {list, itemId}) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + list + '/items/' + itemId)
     itemRef.remove(error => {
       if (error) {
         showErrorMessage(error.message)
+      }
+    })
+  },
+  fbReadListName({ commit }, listId) {
+    const userId = firebaseAuth.currentUser.uid
+    const listRef = firebaseDb.ref('items/' + userId + '/' + listId + '/name')
+
+    listRef.once('value', snapshot => {
+      commit('setListName', snapshot.val())
+    }, error => {
+      if (error) {
+        showErrorMessage(error.message)
+        this.$router.replace("/auth")
       }
     })
   }

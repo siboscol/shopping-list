@@ -27,7 +27,7 @@ export default {
     ...mapActions('items', ['addItem']),
     save() {
       if (this.$refs.formItem.isValidForm()) {
-        this.addItem(this.newItem)
+        this.addItem({ item: this.newItem, list: this.$route.params.list })
       }
     }
   }

@@ -1,14 +1,16 @@
 <template>
-  <q-item v-ripple clickable :to="to" :class="{ 'done bg-blue-1': item.done }">
+  <q-item v-ripple clickable :class="{ 'done bg-blue-1': item.done }">
     <q-item-section avatar>
       <q-checkbox
-        @input="updateItem({id: id, updates: { done: !item.done}})"
+        @input="updateItem({ id: id, updates: { done: !item.done } })"
         :value="item.done"
         color="primary"
       />
     </q-item-section>
-    <q-item-section>
-      <q-item-label v-html="$options.filters.searchHighlight(item.name, search)" />
+    <q-item-section @click.stop="$router.push(to)">
+      <q-item-label
+        v-html="$options.filters.searchHighlight(item.name, search)"
+      />
       <q-item-label caption>{{ totalPrice }} CHF</q-item-label>
     </q-item-section>
     <q-item-section side>
@@ -17,7 +19,14 @@
     <q-item-section side>
       <div class="text-grey-8 q-gutter-xs">
         <q-btn flat dense round color="primary" icon="edit" :to="to" />
-        <q-btn flat dense round color="red" icon="delete" @click.stop="promptToDelete" />
+        <q-btn
+          flat
+          dense
+          round
+          color="red"
+          icon="delete"
+          @click.stop="promptToDelete"
+        />
       </div>
     </q-item-section>
   </q-item>
@@ -34,7 +43,7 @@ export default {
       return parseFloat((this.item.price * this.item.quantity).toFixed(2))
     },
     to() {
-      return `/item/edit/${this.id}`
+      return `${this.$route.params.id}/item/edit/${this.id}`
     }
   },
   methods: {
@@ -48,7 +57,7 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          this.deleteItem(this.id)
+          this.deleteItem({ list: this.$route.params.id, itemId: this.id })
         })
     }
   },
@@ -56,11 +65,9 @@ export default {
     searchHighlight(value, search) {
       if (search) {
         const searchRegExp = RegExp(search, 'ig')
-        return value.replace(
-          searchRegExp, (match) => {
-            return  '<span class="bg-yellow-6">' + match + '</span>'
-          }
-        )
+        return value.replace(searchRegExp, match => {
+          return '<span class="bg-yellow-6">' + match + '</span>'
+        })
       }
       return value
     }

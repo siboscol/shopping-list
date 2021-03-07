@@ -14,7 +14,7 @@
           :list="list"
         />
       </q-list>
-      <div class="absolute-center">
+      <div v-else class="row justify-center absolute-center">
         <q-icon name="list_alt" size="5em" />
         <div>Create a new Shopping List.</div>
       </div>

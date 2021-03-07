@@ -108,6 +108,9 @@ export default {
     itemsToBuyPrice() {
       return this.itemsPriceTotal(this.itemsToBuy)
     }
+  },
+  mounted() {
+    this.fbReadData(this.$route.params.id)
   }
 }
 </script>
