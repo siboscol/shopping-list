@@ -73,6 +73,7 @@ export default {
     ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
     createItem(nameItem) {
       this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
+      this.setSearch('')
     },
     itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)

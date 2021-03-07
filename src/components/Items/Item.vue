@@ -2,7 +2,7 @@
   <q-item v-ripple clickable :class="{ 'done bg-blue-1': item.done }">
     <q-item-section avatar>
       <q-checkbox
-        @input="updateItem({ id: id, updates: { done: !item.done } })"
+        @input="updateItem({ id: id, list: $route.params.id, updates: { done: !item.done } })"
         :value="item.done"
         color="primary"
       />
