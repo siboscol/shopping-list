@@ -9,7 +9,7 @@ const state = {
 }
 
 const mutations = {
-  updateItem(state, payload) {
+  updateList(state, payload) {
     Object.assign(state.lists[payload.id], payload.updates)
   },
   deleteItem(state, id) {
@@ -27,8 +27,8 @@ const mutations = {
 }
 
 const actions = {
-  updateItem({ dispatch }, payload) {
-    dispatch('fbUpdateItem', payload)
+  updateList({ dispatch }, payload) {
+    dispatch('fbUpdateList', payload)
   },
   deleteItem({ dispatch }, id) {
     dispatch('fbDeleteItem', id)
@@ -81,7 +81,7 @@ const actions = {
         id: snapshot.key,
         updates: item
       }
-      commit('updateItem', payload)
+      commit('updateList', payload)
     })
 
     // Child Removed
@@ -99,7 +99,7 @@ const actions = {
       }
     })
   },
-  fbUpdateItem({ }, payload) {
+  fbUpdateList({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
     const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
     itemRef.update(payload.updates, error => {
@@ -123,7 +123,13 @@ const getters = {
   listOfLists: (state) => {
     const listOfLists = Object.keys(state.lists).reduce((acc, id) => {
       const list = state.lists[id]
+      const items = list.items
       list.id = id
+      if (items) {
+        list.priceTotal = itemsPriceTotal(items)
+        list.itemsTotal = itemsNumber(Object.values(items))
+        list.cartTotal = itemsNumber(Object.values(items).filter(i => i.done))
+      }
       acc.unshift(list)
       return acc
     }, [])
@@ -131,11 +137,24 @@ const getters = {
   },
   getListById: state => id => {
     return state.lists[id]
-  },
-  listsTotal: (state, getters) => {
-    const listOfLists = getters.listOfLists
-    return Object.keys(listOfLists).length
   }
+}
+
+const itemsPriceTotal = items => {
+  const reducerSum = (sum, i) => sum + totalPrice(i)
+  const itemsValues = Object.values(items)
+  return Math.round(itemsValues.reduce(reducerSum, 0) * 100) / 100
+}
+
+const totalPrice = item => {
+  return item.price * item.quantity
+}
+
+const itemsNumber = items => {
+  if (!items) {
+    return 0
+  }
+  return Object.keys(items).length
 }
 
 export default {

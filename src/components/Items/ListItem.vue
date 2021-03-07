@@ -4,7 +4,7 @@
       <q-input
         :autofocus="!isEdit"
         :value="list.name"
-        @input="$emit('input', $event)"
+        @input="updateList({ id: list.id, updates: { name: list.name } })"
         type="text"
         :readonly="!isEdit"
         :borderless="!isEdit"
@@ -12,8 +12,9 @@
     </q-item-section>
     <q-item-section side>
       <q-item-label caption
-        >{{ list.quantity }}/{{ list.quantity }}</q-item-label
+        >{{ list.cartTotal || 0 }}/{{ list.itemsTotal || 0 }}</q-item-label
       >
+      <q-item-label caption>{{ list.priceTotal || 0 }} CHF</q-item-label>
     </q-item-section>
     <q-item-section side>
       <div class="text-grey-8 row q-gutter-xs">
@@ -58,7 +59,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('lists', ['deleteItem']),
+    ...mapActions('lists', ['deleteItem', 'updateList']),
     ...mapActions('items', ['fbReadData']),
     promptToDelete() {
       this.$q
@@ -73,8 +74,10 @@ export default {
         })
     },
     loadList() {
-       this.fbReadData(this.list.id)
-      this.$router.push(this.to)
+      if (!this.isEdit) {
+        this.fbReadData(this.list.id)
+        this.$router.push(this.to)
+      }
     }
   }
 }

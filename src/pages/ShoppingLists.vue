@@ -2,7 +2,7 @@
   <q-page class="bg-white">
     <template v-if="listsDownloaded">
       <q-list
-        v-if="listsTotal"
+        v-if="listOfLists.length"
         class="bg-white scroll"
         separator
         bordered
@@ -56,8 +56,7 @@ export default {
   computed: {
     ...mapState('lists', ['listsDownloaded']),
     ...mapGetters('lists', {
-      listOfLists: 'listOfLists',
-      listsTotal: 'listsTotal'
+      listOfLists: 'listOfLists'
     })
   },
   methods: {
