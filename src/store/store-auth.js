@@ -52,7 +52,9 @@ const actions = {
         dispatch('lists/fbReadData', null, { root: true })
       } else {
         commit('items/clearItems', null, { root: true })
+        commit('lists/clearlists', null, { root: true })
         commit('items/setItemsDownloaded', false, { root: true })
+        commit('lists/setlistsDownloaded', false, { root: true })
         commit('setLoggedIn', false)
         LocalStorage.set('loggedIn', false)
         this.$router.replace('/auth').catch(err => { })
