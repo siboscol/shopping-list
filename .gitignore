@@ -35,4 +35,4 @@ yarn-error.log*
 build_apk.sh
 my-release-key.keystore
 ShoppingListApp.apk
-dbStructure.json
+db/
