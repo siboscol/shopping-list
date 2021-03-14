@@ -2,19 +2,20 @@
   <q-item v-ripple clickable>
     <q-item-section @click="loadList()">
       <q-input
-        :autofocus="!isEdit"
-        :value="list.name"
-        @input="updateList({ id: list.id, updates: { name: list.name } })"
+        ref="listName"
+        v-model="currentList.name"
+        @blur="isEdit = false"
         type="text"
         :readonly="!isEdit"
-        :borderless="!isEdit"
       />
     </q-item-section>
     <q-item-section side>
       <q-item-label caption
-        >{{ list.cartTotal || 0 }}/{{ list.itemsTotal || 0 }}</q-item-label
+        >{{ currentList.cartTotal || 0 }}/{{
+          currentList.itemsTotal || 0
+        }}</q-item-label
       >
-      <q-item-label caption>{{ list.priceTotal || 0 }} CHF</q-item-label>
+      <q-item-label caption>{{ currentList.priceTotal || 0 }} CHF</q-item-label>
     </q-item-section>
     <q-item-section side>
       <div class="text-grey-8 row q-gutter-xs">
@@ -46,7 +47,8 @@ export default {
   props: ['list'],
   data() {
     return {
-      isEdit: false
+      isEdit: false,
+      currentList: {}
     }
   },
   computed: {
@@ -73,12 +75,32 @@ export default {
           this.deleteItem(this.list.id)
         })
     },
+    renameSaveList() {
+      if (this.isEdit) {
+        this.$nextTick(() => {
+          this.$refs.listName.focus()
+        })
+      } else {
+        this.updateList({
+          id: this.currentList.id,
+          updates: this.currentList
+        })
+      }
+    },
     loadList() {
       if (!this.isEdit) {
         this.fbReadData(this.list.id)
         this.$router.push(this.to)
       }
     }
+  },
+  watch: {
+    isEdit() {
+      this.renameSaveList()
+    }
+  },
+  mounted() {
+    this.currentList = Object.assign({}, this.list)
   }
 }
 </script>
