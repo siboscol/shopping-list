@@ -1,7 +1,7 @@
 <template>
   <q-input
     ref="price"
-    v-model.number="value"
+    :value="value"
     v-select-all
     @input="$emit('input', $event)"
     type="number"

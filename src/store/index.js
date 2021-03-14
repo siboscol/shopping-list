@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import items from './store-items'
 import itemsList from './store-items-list'
+import lists from "./store-lists";
 import settings from './store-settings'
 import auth from './store-auth'
 
@@ -13,6 +14,7 @@ export default function (/* { ssrContext } */) {
     modules: {
       items,
       itemsList,
+      lists,
       settings,
       auth
     },

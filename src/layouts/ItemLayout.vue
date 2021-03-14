@@ -8,10 +8,10 @@
           round
           dense
           icon="arrow_back"
-          @click="$router.push('/')"
+          @click="$router.go(-1)"
         />
         <q-toolbar-title> {{ headerTitle }}</q-toolbar-title>
-        <q-btn v-if="$route.params.id" flat @click.stop="saveItem" to="/" icon-right="done" />
+        <q-btn flat @click.stop="saveItem" icon-right="done" />
       </q-toolbar>
     </q-header>
 
@@ -35,7 +35,7 @@ export default {
   methods: {
     saveItem() {
       this.$refs.item.save()
-      this.$router.push('/')
+      this.$router.go(-1)
     }
   }
 }

@@ -25,7 +25,11 @@ export default {
     ...mapActions('items', ['updateItem']),
     save() {
       if (this.$refs.formItem.isValidForm()) {
-        this.updateItem({ id: this.$route.params.id, updates: this.item })
+        this.updateItem({
+          id: this.$route.params.id,
+          list: this.$route.params.list,
+          updates: this.item
+        })
       }
     }
   },
