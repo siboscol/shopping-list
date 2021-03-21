@@ -15,8 +15,8 @@ const mutations = {
   deleteItem(state, id) {
     Vue.delete(state.lists, id)
   },
-  addItem(state, payload) {
-    Vue.set(state.lists, payload.id, payload.item)
+  addList(state, payload) {
+    Vue.set(state.lists, payload.id, payload.list)
   },
   clearlists(state) {
     state.lists = {}
@@ -31,7 +31,7 @@ const actions = {
     dispatch('fbUpdateList', payload)
   },
   deleteItem({ dispatch }, id) {
-    dispatch('fbDeleteItem', id)
+    dispatch('fbDeleteList', id)
   },
   addList({ dispatch }, list) {
     const listId = uid()
@@ -46,7 +46,7 @@ const actions = {
   },
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
-    const listsList = firebaseDb.ref('items/' + userId + '/')
+    const listsList = firebaseDb.ref('lists/' + userId + '/')
 
     // initial check for data
     listsList.once(
@@ -64,22 +64,22 @@ const actions = {
 
     // Child Added
     listsList.on('child_added', snapshot => {
-      const item = snapshot.val()
+      const list = snapshot.val()
 
       const payload = {
         id: snapshot.key,
-        item: item
+        list: list
       }
-      commit('addItem', payload)
+      commit('addList', payload)
     })
 
     // Child Changed
     listsList.on('child_changed', snapshot => {
-      const item = snapshot.val()
+      const list = snapshot.val()
 
       const payload = {
         id: snapshot.key,
-        updates: item
+        updates: list
       }
       commit('updateList', payload)
     })
@@ -92,7 +92,7 @@ const actions = {
   },
   fbAddList({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('lists/' + userId + '/' + payload.id)
     itemRef.set(payload.list, error => {
       if (error) {
         showErrorMessage(error.message)
@@ -101,16 +101,16 @@ const actions = {
   },
   fbUpdateList({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('lists/' + userId + '/' + payload.id)
     itemRef.update(payload.updates, error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
   },
-  fbDeleteItem({ }, itemId) {
+  fbDeleteList({ }, listId) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
+    const itemRef = firebaseDb.ref('lists/' + userId + '/' + listId)
     itemRef.remove(error => {
       if (error) {
         showErrorMessage(error.message)
@@ -120,41 +120,9 @@ const actions = {
 }
 
 const getters = {
-  listOfLists: (state) => {
-    const listOfLists = Object.keys(state.lists).reduce((acc, id) => {
-      const list = state.lists[id]
-      const items = list.items
-      list.id = id
-      if (items) {
-        list.priceTotal = itemsPriceTotal(items)
-        list.itemsTotal = itemsNumber(Object.values(items))
-        list.cartTotal = itemsNumber(Object.values(items).filter(i => i.done))
-      }
-      acc.unshift(list)
-      return acc
-    }, [])
-    return listOfLists
-  },
   getListById: state => id => {
     return state.lists[id]
   }
-}
-
-const itemsPriceTotal = items => {
-  const reducerSum = (sum, i) => sum + totalPrice(i)
-  const itemsValues = Object.values(items)
-  return Math.round(itemsValues.reduce(reducerSum, 0) * 100) / 100
-}
-
-const totalPrice = item => {
-  return item.price * item.quantity
-}
-
-const itemsNumber = items => {
-  if (!items) {
-    return 0
-  }
-  return Object.keys(items).length
 }
 
 export default {

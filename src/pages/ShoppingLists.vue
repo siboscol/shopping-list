@@ -2,16 +2,17 @@
   <q-page class="bg-white">
     <template v-if="listsDownloaded">
       <q-list
-        v-if="listOfLists.length"
+        v-if="lists"
         class="bg-white scroll"
         separator
         bordered
         :style="scrollAreaHeight"
       >
         <List
-          v-for="(list, key) in listOfLists"
+          v-for="(list, key) in lists"
           :key="key"
           :list="list"
+          :id="key"
         />
       </q-list>
       <div v-else class="row justify-center absolute-center">
@@ -54,10 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('lists', ['listsDownloaded']),
-    ...mapGetters('lists', {
-      listOfLists: 'listOfLists'
-    })
+    ...mapState('lists', ['listsDownloaded', 'lists'])
   },
   methods: {
     ...mapActions('lists', ['addList']),

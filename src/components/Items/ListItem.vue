@@ -3,19 +3,20 @@
     <q-item-section @click="loadList()">
       <q-input
         ref="listName"
-        v-model="currentList.name"
+        :value="list.name"
+        @input="updateList({ id: id, updates: { name: $event } })"
         @blur="isEdit = false"
         type="text"
         :readonly="!isEdit"
       />
     </q-item-section>
-    <q-item-section side>
-      <q-item-label caption
-        >{{ currentList.cartTotal || 0 }}/{{
-          currentList.itemsTotal || 0
-        }}</q-item-label
-      >
-      <q-item-label caption>{{ currentList.priceTotal || 0 }} CHF</q-item-label>
+    <q-item-section side @click="loadList()">
+      <q-item-label caption>
+        {{ list.cartTotal || 0 }}/{{ list.itemsTotal || 0 }}
+      </q-item-label>
+      <q-item-label caption>
+        {{ list.priceTotal || 0 }} CHF
+      </q-item-label>
     </q-item-section>
     <q-item-section side>
       <div class="text-grey-8 row q-gutter-xs">
@@ -44,11 +45,10 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  props: ['list'],
+  props: ['list', 'id'],
   data() {
     return {
-      isEdit: false,
-      currentList: {}
+      isEdit: false
     }
   },
   computed: {
@@ -57,7 +57,7 @@ export default {
       return parseFloat((this.list.price * this.list.quantity).toFixed(2))
     },
     to() {
-      return `/list/${this.list.id}`
+      return `/list/${this.id}`
     }
   },
   methods: {
@@ -72,35 +72,24 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          this.deleteItem(this.list.id)
+          this.deleteItem(this.id)
         })
-    },
-    renameSaveList() {
-      if (this.isEdit) {
-        this.$nextTick(() => {
-          this.$refs.listName.focus()
-        })
-      } else {
-        this.updateList({
-          id: this.currentList.id,
-          updates: this.currentList
-        })
-      }
     },
     loadList() {
       if (!this.isEdit) {
-        this.fbReadData(this.list.id)
+        this.fbReadData(this.id)
         this.$router.push(this.to)
       }
     }
   },
   watch: {
     isEdit() {
-      this.renameSaveList()
+      if (this.isEdit) {
+        this.$nextTick(() => {
+          this.$refs.listName.focus()
+        })
+      }
     }
-  },
-  mounted() {
-    this.currentList = Object.assign({}, this.list)
   }
 }
 </script>
