@@ -43,7 +43,7 @@ export default {
   computed: {
     ...mapState('itemsList', ['search']),
     to() {
-      return `/item/${this.id}`
+      return `item/edit/${this.id}`
     },
     ...mapGetters('items', ['getItemById']),
   },

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />
+  <div class="bg-white">
+    <!-- <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />s -->
 
     <div class="q-pa-md">
       <div class="column">
