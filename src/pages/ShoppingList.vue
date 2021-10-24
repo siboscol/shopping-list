@@ -86,6 +86,7 @@ export default {
         done: false
       }
       this.addItem({ item: rapidItem, list: this.$route.params.id })
+      this.setSearch('')
     },
     createItem(nameItem) {
       this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
