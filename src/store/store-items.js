@@ -75,6 +75,11 @@ const actions = {
     }
     dispatch('fbAddItem', payload)
     dispatch('fbUpdateListMetaData')
+    const payloadForTotList = {
+      id: itemId,
+      item
+    }
+    dispatch('itemsList/addItem', payloadForTotList, { root: true })
   },
   setSearch({ commit }, value) {
     commit('setSearch', value)

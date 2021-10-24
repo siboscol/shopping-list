@@ -45,7 +45,7 @@ export default {
     to() {
       return `item/edit/${this.id}`
     },
-    ...mapGetters('items', ['getItemById']),
+    ...mapGetters('items', ['getItemById'])
   },
   data() {
     return {
@@ -57,19 +57,27 @@ export default {
     removeFromList() {
       if (this.editedItem.quantity > 1) {
         this.editedItem.quantity--
-        this.updateItem({ id: this.id, updates: this.editedItem })
+        this.updateItem({
+          id: this.id,
+          list: this.$route.params.list,
+          updates: this.editedItem
+        })
       } else if (this.editedItem.quantity === 1) {
         this.editedItem.quantity--
-        this.deleteItem(this.id)
+        this.deleteItem({ list: this.$route.params.list, itemId: this.id })
       }
     },
     addToList() {
       this.editedItem.quantity++
       const itemFromList = this.getItemById(this.id)
       if (!itemFromList) {
-        this.addItem(this.editedItem)
+        this.addItem({ item: this.editedItem, list: this.$route.params.list })
       } else {
-        this.updateItem({ id: this.id, updates: this.editedItem })
+        this.updateItem({
+          id: this.id,
+          list: this.$route.params.list,
+          updates: this.editedItem
+        })
       }
     }
   },

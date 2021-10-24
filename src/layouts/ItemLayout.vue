@@ -11,7 +11,7 @@
           @click="$router.go(-1)"
         />
         <q-toolbar-title> {{ headerTitle }}</q-toolbar-title>
-        <q-btn flat @click.stop="saveItem" icon-right="done" />
+        <q-btn v-if="$route.name !== 'addItems'" flat @click.stop="saveItem" icon-right="done" />
       </q-toolbar>
     </q-header>
 

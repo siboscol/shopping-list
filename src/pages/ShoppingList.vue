@@ -17,8 +17,15 @@
               <div class="text-subtitle3 text-right">CHF</div>
             </div>
           </div>
-          <div class="q-py-sm full-width">
-            <search />
+          <div class="q-py-sm row">
+            <search class="col-grow"/>
+            <q-btn
+              class="q-ml-sm shadow-1"
+              color="primary"
+              size="md"
+              icon="add"
+              @click="addRapidItem"
+            />
           </div>
         </div>
         <q-scroll-area class="q-scroll-area-items">
@@ -71,6 +78,15 @@ export default {
   },
   methods: {
     ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
+    addRapidItem() {
+      const rapidItem = {
+        name: this.search,
+        price: '',
+        quantity: 1,
+        done: false
+      }
+      this.addItem({ item: rapidItem, list: this.$route.params.id })
+    },
     createItem(nameItem) {
       this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
       this.setSearch('')
