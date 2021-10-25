@@ -18,12 +18,13 @@
             </div>
           </div>
           <div class="q-py-sm row">
-            <search class="col-grow"/>
+            <search class="col-grow" @add-item="addRapidItem()" />
             <q-btn
               class="q-ml-sm shadow-1"
               color="primary"
               size="md"
               icon="add"
+              :disable="!search"
               @click="addRapidItem"
             />
           </div>
@@ -79,14 +80,16 @@ export default {
   methods: {
     ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
     addRapidItem() {
-      const rapidItem = {
-        name: this.search,
-        price: '',
-        quantity: 1,
-        done: false
+      if (this.search) {
+        const rapidItem = {
+          name: this.search,
+          price: '',
+          quantity: 1,
+          done: false
+        }
+        this.addItem({ item: rapidItem, list: this.$route.params.id })
+        this.setSearch('')
       }
-      this.addItem({ item: rapidItem, list: this.$route.params.id })
-      this.setSearch('')
     },
     createItem(nameItem) {
       this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
