@@ -24,7 +24,7 @@
               color="primary"
               size="md"
               icon="add"
-              :disable="!search"
+              :disable="!search || this.getItemsNames.includes(this.search)"
               @click="addRapidItem"
             />
           </div>
@@ -80,7 +80,7 @@ export default {
   methods: {
     ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
     addRapidItem() {
-      if (this.search) {
+      if (this.search && !this.getItemsNames.includes(this.search)) {
         const rapidItem = {
           name: this.search,
           price: '',
@@ -114,7 +114,8 @@ export default {
     ...mapState('items', ['search', 'itemsDownloaded']),
     ...mapGetters('items', {
       itemsCart: 'itemsCart',
-      itemsToBuy: 'itemsToBuy'
+      itemsToBuy: 'itemsToBuy',
+      getItemsNames: 'getItemsNames'
     }),
     ...mapGetters('settings', ['settings']),
     itemsCartTotal() {

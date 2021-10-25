@@ -234,6 +234,9 @@ const getters = {
   },
   getItemById: (state) => (id) => {
     return state.items[id]
+  },
+  getItemsNames: state => {
+    return Object.values(state.items).map(i => i.name)
   }
 }
 
