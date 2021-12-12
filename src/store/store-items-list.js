@@ -37,11 +37,11 @@ const actions = {
   deleteItem({ dispatch }, id) {
     dispatch('fbDeleteItem', id)
   },
-  addItem({ dispatch }, item) {
-    const itemId = uid()
+  addItem({ dispatch }, {id , item}) {
+    const itemId = id || uid()
     const payload = {
       id: itemId,
-      item: item
+      item
     }
     dispatch('fbAddItem', payload)
   },
@@ -50,7 +50,7 @@ const actions = {
   },
   fbReadData({ commit }, value) {
     const userId = firebaseAuth.currentUser.uid
-    const itemsList = firebaseDb.ref('itemsList/')
+    const itemsList = firebaseDb.ref(`itemsList/${userId}/`)
 
     // initial check for data
     itemsList.once(
@@ -96,7 +96,7 @@ const actions = {
   },
   fbAddItem({}, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('itemsList/' + userId + '/' + payload.id)
     itemRef.set(payload.item, error => {
       if (error) {
         showErrorMessage(error.message)
@@ -105,7 +105,7 @@ const actions = {
   },
   fbUpdateItem({}, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('itemsList/' + userId + '/' + payload.id)
     itemRef.update(payload.updates, error => {
       if (error) {
         showErrorMessage(error.message)
@@ -114,7 +114,7 @@ const actions = {
   },
   fbDeleteItem({}, itemId) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
+    const itemRef = firebaseDb.ref('itemsList/' + userId + '/' + itemId)
     itemRef.remove(error => {
       if (error) {
         showErrorMessage(error.message)

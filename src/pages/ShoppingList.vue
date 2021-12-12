@@ -17,8 +17,16 @@
               <div class="text-subtitle3 text-right">CHF</div>
             </div>
           </div>
-          <div class="q-py-sm full-width">
-            <search />
+          <div class="q-py-sm row">
+            <search class="col-grow" @add-item="addRapidItem()" />
+            <q-btn
+              class="q-ml-sm shadow-1"
+              color="primary"
+              size="md"
+              icon="add"
+              :disable="!search || this.getItemsNames.includes(this.search)"
+              @click="addRapidItem"
+            />
           </div>
         </div>
         <q-scroll-area class="q-scroll-area-items">
@@ -41,7 +49,7 @@
             color="primary"
             size="lg"
             icon="add"
-            to="/addItems"
+            :to="`${$route.params.id}/addItems`"
             class="all-pointer-events"
           />
         </div>
@@ -59,7 +67,6 @@
 import ItemsToBuy from '../components/Items/ItemsToBuy'
 import ItemsCart from '../components/Items/ItemsCart'
 import NoItems from '../components/Items/NoItems'
-import AddDialog from '../components/Modals/AddDialog'
 import Search from '../components/Tools/Search'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
@@ -71,9 +78,22 @@ export default {
     search: Search
   },
   methods: {
-    ...mapActions('items', ['addItem', 'setSearch']),
+    ...mapActions('items', ['addItem', 'setSearch', 'fbReadData']),
+    addRapidItem() {
+      if (this.search && !this.getItemsNames.includes(this.search)) {
+        const rapidItem = {
+          name: this.search,
+          price: '',
+          quantity: 1,
+          done: false
+        }
+        this.addItem({ item: rapidItem, list: this.$route.params.id })
+        this.setSearch('')
+      }
+    },
     createItem(nameItem) {
-      this.$router.push(`/new/${nameItem}`)
+      this.$router.push(`${this.$route.params.id}/item/new/${nameItem || ''}`)
+      this.setSearch('')
     },
     itemsPriceTotal(items) {
       const reducerSum = (sum, i) => sum + this.totalPrice(i)
@@ -94,7 +114,8 @@ export default {
     ...mapState('items', ['search', 'itemsDownloaded']),
     ...mapGetters('items', {
       itemsCart: 'itemsCart',
-      itemsToBuy: 'itemsToBuy'
+      itemsToBuy: 'itemsToBuy',
+      getItemsNames: 'getItemsNames'
     }),
     ...mapGetters('settings', ['settings']),
     itemsCartTotal() {
@@ -109,6 +130,9 @@ export default {
     itemsToBuyPrice() {
       return this.itemsPriceTotal(this.itemsToBuy)
     }
+  },
+  mounted() {
+    this.fbReadData(this.$route.params.id)
   }
 }
 </script>

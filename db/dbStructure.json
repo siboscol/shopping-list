@@ -1,0 +1,115 @@
+{
+  "items" : {
+    "idUser1" : {
+      "idList1": {
+        "idItem1" : {
+          "done" : false,
+          "name" : "test4 item",
+          "price" : "",
+          "quantity" : 1
+        },
+        "idItem2" : {
+          "done" : false,
+          "name" : "test4 item",
+          "price" : "",
+          "quantity" : 1
+        }
+        ...
+      },
+      "idList2": {
+        "idItem1" : {
+          "done" : false,
+          "name" : "test4 item",
+          "price" : "",
+          "quantity" : 1
+        },
+        "idItem2" : {
+          "done" : false,
+          "name" : "test4 item",
+          "price" : "",
+          "quantity" : 1
+        }
+        ...
+      }
+    },
+    ...
+  },
+  "itemList": {
+    "idUser1": {
+      "idItem1" : {
+        "done" : false,
+        "name" : "test4 item",
+        "price" : "",
+        "quantity" : 1
+      },
+      "idItem2" : {
+        "done" : false,
+        "name" : "test4 item",
+        "price" : "",
+        "quantity" : 1
+      }
+      ...
+    },
+    "idUser2": {
+      "idItem11" : {
+        "done" : false,
+        "name" : "test4 item",
+        "price" : "",
+        "quantity" : 1
+      },
+      "idItem22" : {
+        "done" : false,
+        "name" : "test4 item",
+        "price" : "",
+        "quantity" : 1
+      }
+      ...
+    },
+    ...
+  },
+  "lists": {
+    "idUser1": {
+      "idList1": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      },
+      "idList2": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      },
+      "idList3": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      }
+      ...
+    },
+    "idUser2": {
+      "idList11": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      },
+      "idList22": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      },
+      "idList33": {
+        "cartTotal": 4,
+        "itemsTotal": 9,
+        "name": "List name",
+        "priceTotal": 59
+      }
+      ...
+    },
+    ...
+  }
+}

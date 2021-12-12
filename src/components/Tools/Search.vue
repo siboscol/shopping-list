@@ -9,6 +9,7 @@
     color="bg-grey-7 shadow-1"
     debounce="500"
     @keyup.esc="searchField = ''"
+    @keyup.enter="$emit('add-item')"
   >
     <template v-slot:prepend>
       <q-icon name="search" />

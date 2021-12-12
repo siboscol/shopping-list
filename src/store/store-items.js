@@ -25,7 +25,9 @@ const state = {
     // },
   },
   search: '',
-  itemsDownloaded: false
+  itemsDownloaded: false,
+  listName: '',
+  listId: ''
 }
 
 const mutations = {
@@ -46,35 +48,53 @@ const mutations = {
   },
   setItemsDownloaded(state, value) {
     state.itemsDownloaded = value
+  },
+  setListName(state, value) {
+    state.listName = value
+  },
+  setListId(state, value) {
+    state.listId = value
   }
 }
 
 const actions = {
   updateItem({ dispatch }, payload) {
     dispatch('fbUpdateItem', payload)
+    dispatch('fbUpdateListMetaData')
   },
-  deleteItem({ dispatch }, id) {
-    dispatch('fbDeleteItem', id)
+  deleteItem({ dispatch }, payload) {
+    dispatch('fbDeleteItem', payload)
+    dispatch('fbUpdateListMetaData')
   },
-  addItem({ dispatch }, item) {
+  addItem({ dispatch }, { list, item }) {
     const itemId = item.id || uid()
     const payload = {
       id: itemId,
+      list,
       item: item
     }
     dispatch('fbAddItem', payload)
+    dispatch('fbUpdateListMetaData')
+    const payloadForTotList = {
+      id: itemId,
+      item
+    }
+    dispatch('itemsList/addItem', payloadForTotList, { root: true })
   },
   setSearch({ commit }, value) {
     commit('setSearch', value)
   },
-  fbReadData({ commit }, value) {
+  fbReadData({ commit, dispatch }, value) {
+    commit('clearItems')
     const userId = firebaseAuth.currentUser.uid
-    const userItems = firebaseDb.ref('items/' + userId)
+    const userItems = firebaseDb.ref('items/' + userId + '/' + value)
 
+    dispatch('fbReadListName', value)
+    commit('setListId', value)
     // initial check for data
     userItems.once('value', snapshot => {
       commit('setItemsDownloaded', true)
-    },  error => {
+    }, error => {
       if (error) {
         showErrorMessage(error.message)
         this.$router.replace("/auth")
@@ -109,33 +129,57 @@ const actions = {
       commit('deleteItem', itemId)
     })
   },
-  fbAddItem({}, payload) {
+  fbAddItem({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.list + '/' + payload.id)
     itemRef.set(payload.item, error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
   },
-  fbUpdateItem({}, payload) {
+  fbUpdateItem({ }, payload) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.id)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + payload.list + '/' + payload.id)
     itemRef.update(payload.updates, error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
   },
-  fbDeleteItem({}, itemId) {
+  fbDeleteItem({ }, {list, itemId}) {
     const userId = firebaseAuth.currentUser.uid
-    const itemRef = firebaseDb.ref('items/' + userId + '/' + itemId)
+    const itemRef = firebaseDb.ref('items/' + userId + '/' + list + '/' + itemId)
     itemRef.remove(error => {
       if (error) {
         showErrorMessage(error.message)
       }
     })
-  }
+  },
+  fbReadListName({ commit }, listId) {
+    const userId = firebaseAuth.currentUser.uid
+    const listRef = firebaseDb.ref('lists/' + userId + '/' + listId + '/name')
+
+    listRef.once('value', snapshot => {
+      commit('setListName', snapshot.val())
+    }, error => {
+      if (error) {
+        showErrorMessage(error.message)
+        this.$router.replace("/auth")
+      }
+    })
+  },
+  fbUpdateListMetaData({ dispatch, getters, state }) {
+    const payload = {
+      id: state.listId,
+      updates: {
+        priceTotal: getters.priceTotal,
+        itemsTotal: getters.itemsTotal,
+        cartTotal: getters.cartTotal,
+      }
+    }
+    dispatch('lists/updateList', payload, { root: true })
+  },
 }
 
 const getters = {
@@ -178,9 +222,39 @@ const getters = {
     }, [])
     return itemsCart
   },
+  priceTotal: state => {
+    return itemsPriceTotal(state.items)
+  },
+  itemsTotal: state => {
+    return itemsNumber(state.items)
+  },
+  cartTotal: (state, getters) => {
+    const itemsCart = getters.itemsCart
+    return itemsNumber(itemsCart)
+  },
   getItemById: (state) => (id) => {
     return state.items[id]
+  },
+  getItemsNames: state => {
+    return Object.values(state.items).map(i => i.name)
   }
+}
+
+const itemsPriceTotal = items => {
+  const reducerSum = (sum, i) => sum + totalPrice(i)
+  const itemsValues = Object.values(items)
+  return Math.round(itemsValues.reduce(reducerSum, 0) * 100) / 100
+}
+
+const totalPrice = item => {
+  return item.price * item.quantity
+}
+
+const itemsNumber = items => {
+  if (!items) {
+    return 0
+  }
+  return Object.keys(items).length
 }
 
 export default {

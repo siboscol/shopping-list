@@ -58,7 +58,7 @@ export default {
   methods: {
     ...mapActions('itemsList', ['setSearch']),
     createItem(newItem) {
-      this.$router.push(`/new/${newItem}`)
+      this.$router.push(`item/new/${newItem}`)
     }
   },
   mounted() {
