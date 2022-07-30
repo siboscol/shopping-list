@@ -20,7 +20,7 @@ const fs = require('fs');
             title: textContent(product.querySelector('p.productTile-details__name-value')),
             price: textContent(product.querySelector('p.productTile__price-value-lead-price')),
             oldPrice: textContent(product.querySelector('p.productTile__price-value-lead-price-old')).replace('was  ', ''),
-            imageUrl: product.querySelector('img.product-listing__thumbnail__image').getAttribute('src')
+            imageUrl: product.querySelector('img.product-listing__thumbnail__image').getAttribute('src').replace('15_15', '310_310').replace('//', '')
           }
         )
       })
